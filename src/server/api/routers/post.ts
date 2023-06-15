@@ -1,0 +1,41 @@
+import { z } from "zod";
+import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
+
+export const postRouter = createTRPCRouter({
+    getAll: publicProcedure.query(async ({ ctx }) => {
+        try {
+            return await ctx.prisma.post.findMany({
+                select: {
+                    title: true,
+                    content: true,
+                    user: true,
+                },
+                orderBy: {
+                    createdAt: "desc",
+                },
+            });
+        } catch (error) {
+            console.log("error", error);
+        }
+    }),
+  createPost: protectedProcedure
+    .input(
+      z.object({
+        title: z.string(),
+        content: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.prisma.post.create({
+          data: {
+            title: input.title,
+            content: input.content,
+            user: ctx.prisma.user
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }),
+});
