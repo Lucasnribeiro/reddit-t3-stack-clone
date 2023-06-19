@@ -1,6 +1,8 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "../utils/api";
 import Navbar from "~/components/ui/navbar";
+import PopularPosts from "~/components/PopularPosts";
+import CreatePostCreateCommunityCard from "~/components/ui/CreatePostCreateCommunityCard";
 
 const Posts = () => {
   const { data: posts, isLoading } = api.post.getAll.useQuery();
@@ -30,44 +32,15 @@ const Home = () => {
 
   return (
     <>
-    <Navbar />
-    <main className="flex flex-col items-center">
-      <h1 className="text-3xl pt-4">Reddit</h1>
-      <p>
-        Tutorial for <code>create-t3-app</code>
-      </p>
-      <div className="pt-10">
-        <div>
-          {session ? (
-            <>
-              <p className="mb-4 text-center">hi {session.user?.name}</p>
-              <button
-                type="button"
-                className="mx-auto block rounded-md bg-neutral-800 py-3 px-6 text-center hover:bg-neutral-700"
-                onClick={() => {
-                  signOut().catch(console.log);
-                }}
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <button
-              type="button"
-              className="mx-auto block rounded-md bg-neutral-800 py-3 px-6 text-center hover:bg-neutral-700"
-              onClick={() => {
-                signIn("discord").catch(console.log);
-              }}
-            >
-              Login with Discord
-            </button>
-          )}
+      <div className="flex gap-6">
+        <div className="w-full">
+          <PopularPosts />
         </div>
-        <div className="pt-10">
-        <Posts />
+
+        <div className="w-1/2">
+          <CreatePostCreateCommunityCard/>
+        </div>
       </div>
-      </div>
-    </main>
     </>
   );
 };
