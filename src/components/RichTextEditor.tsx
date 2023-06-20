@@ -42,12 +42,11 @@ const RichTextEditor = () => {
         </div>
         <div className="border-t border-gray-300 my-4"/>
         <div className="flex justify-end mt-3">
-            <a
+            <button
             className="flex items-center justify-center px-5 py-2 font-bold text-white bg-blue-500 rounded-3xl focus:outline-none hover:bg-blue-600"
-            href="/submit"
             >
                 Post
-            </a>
+            </button>
         </div>
     </div>
   );
