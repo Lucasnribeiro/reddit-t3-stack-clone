@@ -1,0 +1,19 @@
+/* RichTextEditor.css */
+.ql-editor {
+    min-height: 200px; /* Set the desired initial height here */
+  }
+
+.rich-text-editor-wrapper {
+  position: relative;
+}
+
+.rich-text-editor-wrapper .ql-editor {
+  resize: vertical; /* Allow vertical resizing */
+  overflow: auto; /* Add scrollbar if content exceeds the height */
+}
+
+.rich-text-editor-wrapper .ql-editor::after {
+  content: "-";
+  position: absolute;
+  cursor: se-resize; /* Show resize cursor */
+}

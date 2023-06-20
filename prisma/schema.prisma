@@ -76,7 +76,7 @@ model Post {
   comments         Comment[]
   upvotes          Upvote[]    @relation("PostUpvotes")
   downvotes        Downvote[]  @relation("PostDownvotes")
-  subreddit        Subreddit @relation(fields: [subredditId], references: [id])
+  subreddit        Subreddit   @relation(fields: [subredditId], references: [id])
 }
 
 model Comment {

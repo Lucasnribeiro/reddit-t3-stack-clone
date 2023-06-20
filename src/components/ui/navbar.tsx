@@ -10,8 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import SubredditSelect from './SubredditSelect';
+import SubredditSelect from '../SubredditSelect';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import Link from 'next/link';
 
 const Navbar = () => {
   const [displayDropdown, setDisplayDropdown] = useState(false);
@@ -29,15 +30,16 @@ const Navbar = () => {
 
   return (
     <div className="bg-white w-full py-2 px-2 flex items-center justify-evenly space-x-1 shadow z-10">
-      <div className="flex text-3xl space-x-2 items-center">
-        <FontAwesomeIcon
-          icon={faReddit}
-          style={{ color: '#FF5700' }}
-          className="bg-white text-4xl"
-        />
-        <div className="font-medium hidden lg:block">reddit</div>
-      </div>
-
+      <Link href={'/'}>
+        <div className="flex text-3xl space-x-2 items-center">
+          <FontAwesomeIcon
+            icon={faReddit}
+            style={{ color: '#FF5700' }}
+            className="bg-white text-4xl"
+          />
+          <div className="font-medium hidden lg:block">reddit</div>
+        </div>
+      </Link>
       <div className="relative ">
         <SubredditSelect />
       </div>

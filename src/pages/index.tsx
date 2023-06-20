@@ -2,7 +2,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "../utils/api";
 import Navbar from "~/components/ui/navbar";
 import PopularPosts from "~/components/PopularPosts";
-import CreatePostCreateCommunityCard from "~/components/ui/CreatePostCreateCommunityCard";
+import CreatePostCreateCommunityCard from "~/components/CreatePostCreateCommunityCard";
 
 const Posts = () => {
   const { data: posts, isLoading } = api.post.all.useQuery();

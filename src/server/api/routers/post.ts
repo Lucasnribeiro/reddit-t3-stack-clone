@@ -7,7 +7,6 @@ export const postRouter = createTRPCRouter({
           select: {
               id: true,
               createdAt: true,
-              subredditId: true,
               title: true,
               content: true,
               user: true,

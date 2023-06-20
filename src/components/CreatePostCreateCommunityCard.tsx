@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 const CreatePostCreateCommunityCard = () => {
@@ -31,12 +32,12 @@ const CreatePostCreateCommunityCard = () => {
     </div>
     <hr className="my-4" />
     <div className="flex flex-col justify-start space-y-4 w-full">
-  <a
+  <Link
     className="flex items-center justify-center px-4 py-2 font-bold text-white bg-blue-500 rounded-xl focus:outline-none hover:bg-blue-600"
     href="/submit"
   >
     Create Post
-  </a>
+  </Link>
   <a
   className="flex items-center justify-center px-4 py-2 font-bold text-blue-500 border border-blue-500 rounded-xl focus:outline-none hover:bg-blue-100 "
   href="/submit"

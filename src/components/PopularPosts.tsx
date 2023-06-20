@@ -1,7 +1,7 @@
 import React from 'react';
-import PopularPostsFilter from '@/components/ui/PopularPostsFilter';
-import PostItem from '@/components//ui/PostItem';
-import QuickNewPost from '@/components/ui/QuickNewPost';
+import PopularPostsFilter from '~/components/PopularPostsFilter';
+import PostItem from '~/components/PostItem';
+import QuickNewPost from '~/components/QuickNewPost';
 import { api } from '~/utils/api';
 import PostItemSkeleton from './PostItemSkeleton';
 
