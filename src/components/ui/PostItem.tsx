@@ -9,11 +9,11 @@ import type { Post } from '@/src/types'
 const PostItem = (props : Post) => {
 
   const interactions = [
-    { icon: faMessage, name: 'Comments' },
-    { icon: faAward, name: 'Award' },
-    { icon: faShare, name: 'Share' },
-    { icon: faBookmark, name: 'Save' },
-    { icon: faEllipsis, name: '' },
+    {id: '1', icon: faMessage, name: 'Comments' },
+    {id: '2', icon: faAward, name: 'Award' },
+    {id: '3', icon: faShare, name: 'Share' },
+    {id: '4', icon: faBookmark, name: 'Save' },
+    {id: '5', icon: faEllipsis, name: '' },
   ];
 
   return (
@@ -48,7 +48,7 @@ const PostItem = (props : Post) => {
         </div>
         <div className="flex text-gray-500 space-x-4">
           {interactions.map((interaction) => (
-            <div  className="text-lg flex place-items-center space-x-2 p-2 hover:bg-gray-200">
+            <div key={interaction.id}  className="text-lg flex place-items-center space-x-2 p-2 hover:bg-gray-200">
               <FontAwesomeIcon icon={interaction.icon} />
               <div>
                 {interaction.name}

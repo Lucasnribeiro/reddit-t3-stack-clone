@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const SubredditSelect = () => {
   const [selectedOption, setSelectedOption] = useState('');
 
-  const handleSelectChange = (event) => {
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(event.target.value);
   };
 

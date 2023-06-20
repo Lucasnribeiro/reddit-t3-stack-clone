@@ -3,25 +3,24 @@ import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 
 export const postRouter = createTRPCRouter({
     all: publicProcedure.query(async ({ ctx }) => {
-
-            return await ctx.prisma.post.findMany({
-                select: {
-                    id: true,
-                    createdAt: true,
-                    subredditId: true,
-                    title: true,
-                    content: true,
-                    user: true,
-                    comments: true,
-                    upvotes: true,
-                    downvotes: true,
-                    subreddit: true,
-                },
-                orderBy: {
-                    createdAt: "desc",
-                },
-                take: 20,
-            });
+      return await ctx.prisma.post.findMany({
+          select: {
+              id: true,
+              createdAt: true,
+              subredditId: true,
+              title: true,
+              content: true,
+              user: true,
+              comments: true,
+              upvotes: true,
+              downvotes: true,
+              subreddit: true,
+          },
+          orderBy: {
+              createdAt: "desc",
+          },
+          take: 20,
+      });
     }),
   createPost: protectedProcedure
     .input(
@@ -32,7 +31,6 @@ export const postRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      try {
         await ctx.prisma.post.create({
           data: {
             title: input.title,
@@ -45,8 +43,5 @@ export const postRouter = createTRPCRouter({
             }
           },
         });
-      } catch (error) {
-        console.log(error);
-      }
     }),
 });

@@ -45,9 +45,4 @@ const PopularPostsFilter = () => {
   );
 };
 
-const Icon = ({ icon, className }) => {
-  // Implement your own icon component or use a library
-  return <i className={`fa fa-${icon} ${className}`} />;
-};
-
 export default PopularPostsFilter;
