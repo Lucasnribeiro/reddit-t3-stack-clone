@@ -21,7 +21,7 @@ import QuillNoSSRWrapper from './lib/QuillNoSSRWrapper';
 const RichTextEditor = () => {
   const [content, setContent] = useState('');
 
-  const handleEditorChange = (newContent) => {
+  const handleEditorChange = (newContent: string) => {
     setContent(newContent);
   };
 
