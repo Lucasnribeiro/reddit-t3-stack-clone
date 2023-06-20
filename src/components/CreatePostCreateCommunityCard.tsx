@@ -38,12 +38,12 @@ const CreatePostCreateCommunityCard = () => {
   >
     Create Post
   </Link>
-  <a
+  <Link
   className="flex items-center justify-center px-4 py-2 font-bold text-blue-500 border border-blue-500 rounded-xl focus:outline-none hover:bg-blue-100 "
   href="/submit"
   >
     Create Community
-  </a>
+  </Link>
 
 </div>
 
