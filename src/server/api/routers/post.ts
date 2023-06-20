@@ -3,31 +3,32 @@ import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 
 export const postRouter = createTRPCRouter({
     all: publicProcedure.query(async ({ ctx }) => {
-        try {
+
             return await ctx.prisma.post.findMany({
                 select: {
                     id: true,
                     createdAt: true,
+                    subredditId: true,
                     title: true,
                     content: true,
                     user: true,
                     comments: true,
                     upvotes: true,
-                    downvotes: true
+                    downvotes: true,
+                    subreddit: true,
                 },
                 orderBy: {
                     createdAt: "desc",
                 },
+                take: 20,
             });
-        } catch (error) {
-            console.log("error", error);
-        }
     }),
   createPost: protectedProcedure
     .input(
       z.object({
         title: z.string(),
         content: z.string(),
+        subredditId: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -36,7 +37,12 @@ export const postRouter = createTRPCRouter({
           data: {
             title: input.title,
             content: input.content,
-            user: ctx.prisma.user
+            user: ctx.prisma.user,
+            subreddit: {
+              connect: {
+                id: input.subredditId
+              }
+            }
           },
         });
       } catch (error) {

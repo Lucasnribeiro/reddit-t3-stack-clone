@@ -23,8 +23,8 @@ const { data: posts, isLoading, isError } = api.post.all.useQuery();
       {isLoading ? 
         <PostItemSkeleton />
         :
-        posts.map((post, index) => (
-          <PostItem key={index} post={post} />
+        posts?.map((post, index) => (
+          <PostItem key={index} {...post} />
         ))
       }
     </div>

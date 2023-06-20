@@ -5,11 +5,9 @@ import React from 'react';
 import { faMessage } from '@fortawesome/free-regular-svg-icons';
 import type { Post } from '@/src/types'
 
-type PostProps = {
-  post: Post
-}
 
-const PostItem = ({ post } : PostProps) => {
+const PostItem = (props : Post) => {
+
   const interactions = [
     { icon: faMessage, name: 'Comments' },
     { icon: faAward, name: 'Award' },
@@ -25,7 +23,7 @@ const PostItem = ({ post } : PostProps) => {
           <FontAwesomeIcon icon={faChevronUp} className="hover:text-red-500" />
         </div>
         <div className=" font-bold text-sm">
-          {Object.keys(post.upvotes).length}
+          {Object.keys(props.upvotes).length}
         </div>
         <div>
         <FontAwesomeIcon icon={faChevronDown} className="hover:text-red-500" />
@@ -37,16 +35,16 @@ const PostItem = ({ post } : PostProps) => {
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <div className="font-bold">{post.subreddit}</div>
+          <div className="font-bold">{props.subreddit.title}</div>
           <div className="font-thin text-gray-600">
-            Posted by {post.user.name} {new Date(post.createdAt).toString()}
+            Posted by {props.user.name} {new Date(props.createdAt).toString()}
           </div>
         </div>
         <div className="text-2xl font-bold py-4">
-          {post.title}
+          {props.title}
         </div>
         <div style={{WebkitMaskImage: 'linear-gradient(180deg, #000 60%, transparent)'}} className='pb-2 pr-8'>
-            {post.content}
+            {props.content}
         </div>
         <div className="flex text-gray-500 space-x-4">
           {interactions.map((interaction) => (

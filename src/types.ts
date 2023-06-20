@@ -1,7 +1,5 @@
-import type { inferRouterOutputs } from "@trpc/server";
-import type { AppRouter } from "./server/api/root";
+import { RouterOutputs } from "./utils/api";
 
-type RouterOutputs = inferRouterOutputs<AppRouter>
 type allPostsOutput = RouterOutputs["post"]["all"]
 
-export type Post = allPostsOutput[];
+export type Post = allPostsOutput[number];
