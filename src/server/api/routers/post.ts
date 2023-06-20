@@ -2,13 +2,18 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 
 export const postRouter = createTRPCRouter({
-    getAll: publicProcedure.query(async ({ ctx }) => {
+    all: publicProcedure.query(async ({ ctx }) => {
         try {
             return await ctx.prisma.post.findMany({
                 select: {
+                    id: true,
+                    createdAt: true,
                     title: true,
                     content: true,
                     user: true,
+                    comments: true,
+                    upvotes: true,
+                    downvotes: true
                 },
                 orderBy: {
                     createdAt: "desc",

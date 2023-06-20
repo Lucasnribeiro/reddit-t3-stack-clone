@@ -5,7 +5,7 @@ import PopularPosts from "~/components/PopularPosts";
 import CreatePostCreateCommunityCard from "~/components/ui/CreatePostCreateCommunityCard";
 
 const Posts = () => {
-  const { data: posts, isLoading } = api.post.getAll.useQuery();
+  const { data: posts, isLoading } = api.post.all.useQuery();
 
   if (isLoading) return <div>Fetching posts...</div>;
 
@@ -32,12 +32,12 @@ const Home = () => {
 
   return (
     <>
-      <div className="flex gap-6">
+      <div className="flex gap-8">
         <div className="w-full">
           <PopularPosts />
         </div>
 
-        <div className="w-1/2">
+        <div className="hidden w-1/2 md:block">
           <CreatePostCreateCommunityCard/>
         </div>
       </div>

@@ -66,15 +66,17 @@ model VerificationToken {
 }
 
 model Post {
-  id               String     @id @default(cuid())
-  createdAt        DateTime   @default(now())
+  id               String      @id @default(cuid())
+  createdAt        DateTime    @default(now())
   userId           String
+  subredditId      String    
   title            String
-  content          String     @db.Text()
-  user             User       @relation(fields: [userId], references: [id])
+  content          String      @db.Text()
+  user             User        @relation(fields: [userId], references: [id])
   comments         Comment[]
-  upvotes          Upvote[]   @relation("PostUpvotes")
-  downvotes        Downvote[] @relation("PostDownvotes")
+  upvotes          Upvote[]    @relation("PostUpvotes")
+  downvotes        Downvote[]  @relation("PostDownvotes")
+  subreddit        Subreddit @relation(fields: [subredditId], references: [id])
 }
 
 model Comment {
@@ -141,6 +143,7 @@ model Subreddit {
   title        String
   admins       Admin[]
   moderators   Moderator[]
+  posts        Post[]
   ownerId      String
   user         User        @relation(fields: [ownerId], references: [id])
 }
