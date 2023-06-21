@@ -5,6 +5,7 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import '~/styles/RichTextEditor.css'
 import Layout from "~/components/Layout";
+import { Toaster } from "react-hot-toast";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -15,6 +16,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <Layout {...{Component, pageProps}}>
         <Component {...pageProps} />
       </Layout>
+      <Toaster />
     </SessionProvider>
   );
 };

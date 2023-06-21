@@ -22,13 +22,13 @@ const PopularPostsFilter = () => {
                     <div className="text-blue-500 bg-gray-200 rounded-full px-4 py-2 font-black flex place-items-center space-x-2 hover:bg-gray-300">
                         {item.icon && <FontAwesomeIcon icon={item.icon} className="text-xl" />}
                         <div>{item.name}</div>
-                        {item.caretDown && <FontAwesomeIcon icon="caret-down" />}
+                        {item.caretDown && <FontAwesomeIcon icon={faCaretDown} />}
                     </div>
                     ) : (
                     <div className="text-gray-500 rounded-full p-2 font-black space-x-2 flex place-items-center hover:bg-gray-300">
                         {item.icon && <FontAwesomeIcon icon={item.icon} className="text-xl" />}
                         <div>{item.name}</div>
-                        {item.caretDown && <FontAwesomeIcon icon="caret-down" />}
+                        {item.caretDown && <FontAwesomeIcon icon={faCaretDown} />}
                     </div>
                     )}
                 </div>

@@ -1,19 +1,17 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 
-export const postRouter = createTRPCRouter({
+export const subredditRouter = createTRPCRouter({
     all: publicProcedure.query(async ({ ctx }) => {
-      return await ctx.prisma.post.findMany({
+      return await ctx.prisma.subreddit.findMany({
           select: {
               id: true,
               createdAt: true,
               title: true,
-              content: true,
               user: true,
-              comments: true,
-              upvotes: true,
-              downvotes: true,
-              subreddit: true,
+              admins: true,
+              moderators: true,
+              
           },
           orderBy: {
               createdAt: "desc",
@@ -25,17 +23,13 @@ export const postRouter = createTRPCRouter({
     .input(
       z.object({
         title: z.string(),
-        content: z.string(),
-        subredditId: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-        await ctx.prisma.post.create({
+        await ctx.prisma.subreddit.create({
           data: {
             title: input.title,
-            content: input.content,
-            userId: ctx.session.user.id,
-            subredditId: input.subredditId
+            ownerId: ctx.session.user.id,
           },
         });
     }),
