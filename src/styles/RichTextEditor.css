@@ -13,7 +13,5 @@
 }
 
 .rich-text-editor-wrapper .ql-editor::after {
-  content: "-";
-  position: absolute;
   cursor: se-resize; /* Show resize cursor */
 }
