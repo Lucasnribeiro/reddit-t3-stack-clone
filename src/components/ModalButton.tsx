@@ -11,7 +11,7 @@ interface ModalButtonProps {
   actionText: string;
   buttonText: string;
   // I really don't know how to type this
-  onSubmit: (data: any) => void;
+  onSubmit: (data: any) => any;
 }
 
 

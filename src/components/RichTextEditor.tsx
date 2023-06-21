@@ -27,7 +27,7 @@ const RichTextEditor = ({subreddit}: {subreddit: string}) => {
 
   const { mutate } = api.post.create.useMutation({
     onSettled: async () => {
-      router.push('/')
+      await router.push('/')
     }
   })
 

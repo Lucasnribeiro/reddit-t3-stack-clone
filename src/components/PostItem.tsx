@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import React from 'react';
 import { faMessage } from '@fortawesome/free-regular-svg-icons';
 import type { Post } from '@/src/types'
+import DOMPurify from 'dompurify';
 
 
 const PostItem = (props : Post) => {
@@ -43,8 +44,8 @@ const PostItem = (props : Post) => {
         <div className="text-2xl font-bold py-4">
           {props.title}
         </div>
-        <div style={{WebkitMaskImage: 'linear-gradient(180deg, #000 60%, transparent)'}} className='pb-2 pr-8'>
-            {props.content}
+        <div  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(props.content) }} style={{WebkitMaskImage: 'linear-gradient(180deg, #000 60%, transparent)'}} className='pb-2 pr-8'>
+        
         </div>
         <div className="flex text-gray-500 space-x-4">
           {interactions.map((interaction) => (

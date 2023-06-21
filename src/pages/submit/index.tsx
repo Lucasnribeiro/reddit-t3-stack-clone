@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import RichTextEditor from "~/components/RichTextEditor";
 import { api } from '~/utils/api';
 
-export default function submit(){
+export default function Submit(){
     const [subreddit, setSubreddit] = useState('');
     const { data: subreddits, isLoading } = api.subreddit.all.useQuery();
 
