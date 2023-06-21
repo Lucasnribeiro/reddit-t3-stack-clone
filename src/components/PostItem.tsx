@@ -36,7 +36,7 @@ const PostItem = (props : Post) => {
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <div className="font-bold">{props.subreddit.title}</div>
+          <div className="font-bold">r/{props.subreddit.title}</div>
           <div className="font-thin text-gray-600">
             Posted by {props.user.name} {new Date(props.createdAt).toString()}
           </div>
