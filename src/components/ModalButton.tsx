@@ -1,8 +1,7 @@
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
-import { FieldValues, useFormContext } from 'react-hook-form';
-import { CreateCommunityFormValues } from '~/types';
+import { useFormContext } from 'react-hook-form';
 
 interface ModalButtonProps {
   modalTitle: string;
@@ -13,7 +12,6 @@ interface ModalButtonProps {
   // I really don't know how to type this
   onSubmit: (data: any) => any;
 }
-
 
 const ModalButton: React.FC<ModalButtonProps> = ({modalTitle, children, actionText, buttonText, onSubmit, ...props}) => {
   const [isOpen, setIsOpen] = useState(false);
