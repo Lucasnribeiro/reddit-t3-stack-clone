@@ -5,6 +5,7 @@ import React from 'react';
 import { faMessage } from '@fortawesome/free-regular-svg-icons';
 import type { Post } from '@/src/types'
 import DOMPurify from 'dompurify';
+import Link from 'next/link';
 
 
 const PostItem = (props : Post) => {
@@ -36,7 +37,7 @@ const PostItem = (props : Post) => {
               <AvatarImage src={props.user.image ?? '/images/placeholder-avatar.png'}/>
               <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <div className="font-bold">r/{props.subreddit.title}</div>
+          <Link href={`/r/${props.subreddit.title}`}><div className="font-bold">r/{props.subreddit.title}</div></Link> 
           <div className="font-thin text-gray-600">
             Posted by {props.user.name} {new Date(props.createdAt).toString()}
           </div>

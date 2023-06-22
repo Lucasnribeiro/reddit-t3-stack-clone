@@ -2,8 +2,32 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 
 export const subredditRouter = createTRPCRouter({
-    all: publicProcedure.query(async ({ ctx }) => {
-      return await ctx.prisma.subreddit.findMany({
+  all: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.subreddit.findMany({
+        select: {
+            id: true,
+            createdAt: true,
+            title: true,
+            user: true,
+            admins: true,
+            moderators: true,
+            
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+        take: 20,
+    });
+  }),
+
+  get: publicProcedure
+    .input(
+      z.object({
+        title: z.string().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.subreddit.findFirst({
           select: {
               id: true,
               createdAt: true,
@@ -13,12 +37,17 @@ export const subredditRouter = createTRPCRouter({
               moderators: true,
               
           },
+          where: {
+            title: input.title ? input.title : undefined,
+          },
           orderBy: {
               createdAt: "desc",
           },
           take: 20,
       });
-    }),
+  }),
+
+
   create: protectedProcedure
     .input(
       z.object({
@@ -33,6 +62,8 @@ export const subredditRouter = createTRPCRouter({
           },
         });
     }),
+
+
     getBatch: protectedProcedure
     .input(
       z.object({
