@@ -1,20 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PopularPostsFilter from '~/components/PopularPostsFilter';
 import PostItem from '~/components/PostItem';
 import QuickNewPost from '~/components/QuickNewPost';
 import { api } from '~/utils/api';
 import PostItemSkeleton from './PostItemSkeleton';
+import ScrollTriggerComponent from './ScrollTriggerComponent';
 
 const PopularPosts = () => {
-const { data: posts, isLoading, isError } = api.post.all.useQuery();
-
-
-  const popularItems = [
-    { name: 'Item 1', isBlue: true, icon: 'icon1', caretDown: true },
-    { name: 'Item 2', isBlue: false, icon: 'icon2', caretDown: false },
-    { name: 'Item 3', isBlue: true, icon: 'icon3', caretDown: true },
-    // Add more items as needed
-  ];
+  const [page, setPage] = useState(0);  
+  const { data: posts, isLoading, isError, fetchNextPage, isFetchingNextPage, hasNextPage } = api.post.getBatch.useInfiniteQuery(
+    {
+      limit: 5,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
+  const handleFetchNextPage = async () => {
+      await fetchNextPage();
+      setPage((prev) => prev + 1);
+  };
 
   return (
     <div className="flex flex-col space-y-4">
@@ -23,10 +28,23 @@ const { data: posts, isLoading, isError } = api.post.all.useQuery();
       {isLoading ? 
         <PostItemSkeleton />
         :
-        posts?.map((post, index) => (
-          <PostItem key={index} {...post} />
-        ))
+        <>
+
+          {
+            posts?.pages?.map((currentPage) => 
+              currentPage.items.map((post, index, array) => (
+                <PostItem key={index} {...post} />
+            )))
+          } 
+          
+          <ScrollTriggerComponent callFunction={handleFetchNextPage} isFetchingNextPage={isFetchingNextPage} hasNextPage={hasNextPage}/>
+
+          {
+            isFetchingNextPage && <PostItemSkeleton/>
+          }
+        </>
       }
+
     </div>
   );
 };

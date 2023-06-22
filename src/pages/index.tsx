@@ -1,27 +1,6 @@
-import { signIn, signOut, useSession } from "next-auth/react";
-import { api } from "../utils/api";
-import Navbar from "~/components/ui/navbar";
+import { useSession } from "next-auth/react";
 import PopularPosts from "~/components/PopularPosts";
 import CreatePostCreateCommunityCard from "~/components/CreatePostCreateCommunityCard";
-
-const Posts = () => {
-  const { data: posts, isLoading } = api.post.all.useQuery();
-
-  if (isLoading) return <div>Fetching posts...</div>;
-
-  return (
-    <div className="flex flex-col gap-4">
-      {posts?.map((post, index) => {
-        return (
-          <div key={index}>
-            <p>{post.title}</p>
-            <span>{post.content}</span>
-          </div>
-        );
-      })}
-    </div>
-  );
-};
 
 const Home = () => {
   const { data: session, status } = useSession();

@@ -1,10 +1,12 @@
 import React, {useState} from 'react'
 import RichTextEditor from "~/components/RichTextEditor";
 import { api } from '~/utils/api';
+import Select from 'react-select';
+import { useSession } from 'next-auth/react';
+import SelectSubreddit from '~/components/SelectSubreddit';
 
 export default function Submit(){
     const [subreddit, setSubreddit] = useState('');
-    const { data: subreddits, isLoading } = api.subreddit.all.useQuery();
 
     return (
         <>
@@ -14,12 +16,11 @@ export default function Submit(){
                         <h1 className="font-semibold text-lg font">Create a Post</h1>
                     </div>
                     <div className="border-t border-white my-4"/>
-                    <select onChange={(e) => setSubreddit(e.target.value)} value={subreddit}>
-                        <option>Select a community</option>
-                        {subreddits?.map( subreddit =>
-                            <option value={subreddit.id} key={subreddit.id}>{subreddit.title}</option>    
-                        )}
-                    </select>
+                    <div className='flex'>
+                        <div className='w-1/2'>
+                            <SelectSubreddit setSubreddit={setSubreddit} optionValue='id'/>
+                        </div>
+                    </div>
                     <RichTextEditor subreddit={subreddit}/>
                 </div>
                 <div className="hidden w-1/2 md:block">

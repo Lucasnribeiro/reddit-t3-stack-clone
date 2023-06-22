@@ -33,7 +33,7 @@ const PostItem = (props : Post) => {
       <div className="flex flex-col pl-4 pt-2">
         <div className="flex place-items-center space-x-2">
           <Avatar style={{width: 25, height: 25}}>
-              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarImage src={props.user.image ?? '/images/placeholder-avatar.png'}/>
               <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div className="font-bold">r/{props.subreddit.title}</div>
@@ -44,7 +44,11 @@ const PostItem = (props : Post) => {
         <div className="text-2xl font-bold py-4">
           {props.title}
         </div>
-        <div  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(props.content) }} style={{WebkitMaskImage: 'linear-gradient(180deg, #000 60%, transparent)'}} className='pb-2 pr-8'>
+        <div 
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(props.content) }} 
+          style={{WebkitMaskImage: 'linear-gradient(180deg, #000 60%, transparent)'}} 
+          className='pb-2 pr-8'
+        >
         
         </div>
         <div className="flex text-gray-500 space-x-4">

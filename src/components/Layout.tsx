@@ -16,7 +16,9 @@ function Layout({children}: Props){
                 >
                     {children}
                 </div>
+                <div className='mt-2'>
 
+                </div>
             </div>
         </>
     )

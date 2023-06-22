@@ -36,6 +36,7 @@
     "react-hook-form": "^7.45.0",
     "react-hot-toast": "^2.4.1",
     "react-quill": "^2.0.0",
+    "react-select": "^5.7.3",
     "superjson": "1.12.2",
     "tailwind-merge": "^1.13.1",
     "tailwindcss-animate": "^1.0.6",
