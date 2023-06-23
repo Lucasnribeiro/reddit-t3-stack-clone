@@ -28,7 +28,7 @@ const CreateCommunityForm: React.FC = () => {
                 <span className="inline-flex items-center px-3 text-sm border border-r-0 rounded-l-md">
                     r/
                 </span>
-                <input maxLength={21} {...register('title', { onChange: (e) => handleChange(e)})} type="text" id="website-admin" className="rounded-none rounded-r-lg block flex-1 min-w-0 w-full text-sm p-2.5 border border-r-0 outline-none" placeholder=""/>
+                <input maxLength={21} {...register('title', { onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)})} type="text" id="website-admin" className="rounded-none rounded-r-lg block flex-1 min-w-0 w-full text-sm p-2.5 border border-r-0 outline-none" placeholder=""/>
             </div>
 
             <p className="text-xs text-gray-400">{count} Characters remaining</p>
