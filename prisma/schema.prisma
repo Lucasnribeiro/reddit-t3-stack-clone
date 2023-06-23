@@ -138,12 +138,13 @@ model Moderator {
 }
 
 model Subreddit {
-  id           String      @id @default(cuid())
-  createdAt    DateTime    @default(now())
-  title        String
-  admins       Admin[]
-  moderators   Moderator[]
-  posts        Post[]
-  ownerId      String
-  user         User        @relation(fields: [ownerId], references: [id])
+  id                    String      @id @default(cuid())
+  createdAt             DateTime    @default(now())
+  title                 String
+  subredditHandle       String?
+  admins                Admin[]
+  moderators            Moderator[]
+  posts                 Post[]
+  ownerId               String
+  user                  User        @relation(fields: [ownerId], references: [id])
 }

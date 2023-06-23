@@ -58,6 +58,7 @@ export const subredditRouter = createTRPCRouter({
         await ctx.prisma.subreddit.create({
           data: {
             title: input.title,
+            subredditHandle: input.title,
             ownerId: ctx.session.user.id,
           },
         });

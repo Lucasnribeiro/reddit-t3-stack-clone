@@ -74,7 +74,7 @@ const CreatePostCreateCommunityCard : React.FC = () => {
         onSubmit={submitFunction}
       >
         
-        <CreateCommunityForm />
+        <CreateCommunityForm/>
       </ModalButton>
     </FormProvider>
 </div>

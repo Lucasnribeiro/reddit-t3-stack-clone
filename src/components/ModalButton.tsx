@@ -56,7 +56,7 @@ const ModalButton: React.FC<ModalButtonProps> = ({modalTitle, children, actionTe
                   </button>
                   <button
                       type='submit'
-                      className="flex items-center justify-center px-4 py-2 font-bold text-white bg-blue-500 rounded-3xl focus:outline-none hover:bg-blue-600"
+                      className="flex items-center justify-center px-4 py-2 font-bold text-white bg-blue-500 rounded-3xl focus:outline-none hover:bg-blue-600 disabled:bg-slate-300"
                   >
                       {actionText}
                   </button>

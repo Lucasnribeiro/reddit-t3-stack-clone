@@ -38,7 +38,7 @@ export const postRouter = createTRPCRouter({
           },
         });
     }),
-    getBatch: protectedProcedure
+    getBatch: publicProcedure
     .input(
       z.object({
         limit: z.number(),
@@ -47,10 +47,11 @@ export const postRouter = createTRPCRouter({
         cursor: z.string().nullish(),
         skip: z.number().optional(),
         subredditId: z.string().optional(),
+        subredditTitle: z.string().optional()
       })
     )
     .query(async({ ctx, input }) => {
-      const { limit, skip, subredditId, cursor } = input;
+      const { limit, skip, subredditId, subredditTitle, cursor } = input;
       const items = await ctx.prisma.post.findMany({
         take: limit + 1,
         skip: skip,
@@ -70,7 +71,8 @@ export const postRouter = createTRPCRouter({
           subreddit: true,
         },
         where: {
-          subredditId: subredditId ? subredditId : undefined
+          subredditId: subredditId ? subredditId : undefined,
+          title: subredditTitle ? subredditTitle : undefined
         },
       });
       let nextCursor: typeof cursor | undefined = undefined;

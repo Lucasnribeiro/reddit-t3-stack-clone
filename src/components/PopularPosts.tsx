@@ -6,11 +6,16 @@ import { api } from '~/utils/api';
 import PostItemSkeleton from './PostItemSkeleton';
 import ScrollTriggerComponent from './ScrollTriggerComponent';
 
-const PopularPosts = () => {
+interface PopularPostsProps {
+  subredditId?: string | undefined
+}
+
+const PopularPosts: React.FC<PopularPostsProps> = ({subredditId}) => {
   const [page, setPage] = useState(0);  
   const { data: posts, isLoading, isError, fetchNextPage, isFetchingNextPage, hasNextPage } = api.post.getBatch.useInfiniteQuery(
     {
       limit: 5,
+      subredditId: subredditId
     },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
