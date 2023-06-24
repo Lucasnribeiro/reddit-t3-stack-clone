@@ -63,7 +63,8 @@ const PostItem = (props : Post) => {
                     setCurrentInteractions((prevInteractions) => Math.max(prevInteractions - 1, 0));
                   }
                 } 
-                icon={faChevronUp} className="text-red-500 hover:text-slate-200" 
+                icon={faChevronUp} 
+                className="text-red-500 hover:text-slate-200 cursor-pointer" 
               />
             </div>
           :
@@ -80,7 +81,8 @@ const PostItem = (props : Post) => {
                     setCurrentInteractions((prevInteractions) => prevInteractions + 1);
                   }
                 } 
-                icon={faChevronUp} className="hover:text-red-500" 
+                icon={faChevronUp} 
+                className="hover:text-red-500 cursor-pointer" 
               />
             </div>
         }
@@ -97,7 +99,8 @@ const PostItem = (props : Post) => {
                       setCurrentInteractions((prevInteractions) => Math.max(prevInteractions - 1, 0));
                     }
                   } 
-                  icon={faChevronDown} className="text-red-500 hover:text-slate-200" 
+                  icon={faChevronDown} 
+                  className="text-red-500 hover:text-slate-200 cursor-pointer" 
                   />
               </div>
 
@@ -115,7 +118,8 @@ const PostItem = (props : Post) => {
                       setCurrentInteractions((prevInteractions) => prevInteractions - 1);
                     }
                   } 
-                  icon={faChevronDown} className="hover:text-red-500" 
+                  icon={faChevronDown}
+                   className="hover:text-red-500 cursor-pointer" 
                   />
               </div>
         }

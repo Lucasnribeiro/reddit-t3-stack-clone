@@ -1,3 +1,4 @@
+import React, {useState} from 'react'
 import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, InferGetStaticPropsType, NextPage } from "next"
 import { useSession } from "next-auth/react"
 import CreatePostCreateCommunityCard from "~/components/CreatePostCreateCommunityCard"
@@ -9,6 +10,7 @@ import { api } from "~/utils/api"
 const Subreddit: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>>= ({ subreddit }) => {
     const { data: session, status } = useSession();
     const { data: subredditQuery } = api.subreddit.get.useQuery({ title: subreddit})
+    const [memberStatus, setMemberStatus ] = useState(subredditQuery?.members.some((item) => item.userId === session?.user.id))
 
     const trpc = api.useContext()
 
@@ -41,9 +43,13 @@ const Subreddit: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
                     </div>
                     <div className="pl-10">
                         {subredditQuery ?
-                            subredditQuery.members.some((item) => item.userId === session?.user.id) ? 
+                            memberStatus ? 
                                                             
-                                <button onClick={() => leaveSubreddit({subredditId: subredditQuery?.id})} className="h-2/5 px-8 py-2 font-bold text-blue-500 bg-transparent border border-blue-500 rounded-3xl focus:outline-none hover:bg-blue-600 hover:text-white transition-colors duration-300 group">
+                                <button onClick={() => {
+                                            leaveSubreddit({subredditId: subredditQuery?.id});
+                                            setMemberStatus(false)
+                                        }
+                                    } className="h-2/5 px-8 py-2 font-bold text-blue-500 bg-transparent border border-blue-500 rounded-3xl focus:outline-none hover:bg-red-600 hover:text-white transition-colors duration-300 group">
                                     <span className="group-hover:hidden">
                                         Joined
                                     </span>
@@ -54,8 +60,12 @@ const Subreddit: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
 
                                 :
                                 <button 
-                                    className="h-2/5 px-8 py-1 font-bold text-white bg-blue-500 rounded-3xl focus:outline-none hover:bg-blue-600"
-                                    onClick={() => joinSubreddit({subredditId: subredditQuery?.id})}
+                                    className="h-2/5 px-8 py-2 font-bold text-white bg-blue-500 rounded-3xl focus:outline-none hover:bg-blue-600"
+                                    onClick={() => {
+                                            joinSubreddit({subredditId: subredditQuery?.id});
+                                            setMemberStatus(true);
+                                        }
+                                    }
                                 >
                                     Join
                                 </button>
