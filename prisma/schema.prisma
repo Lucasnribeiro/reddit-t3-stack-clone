@@ -53,6 +53,7 @@ model User {
   admiministrates   Admin[]
   moderates         Moderator[]
   subreddits        Subreddit[]
+  memberSubreddits  UserSubreddit[] 
   upvotes           Upvote[] 
   downvotes         Downvote[]
 }
@@ -144,7 +145,21 @@ model Subreddit {
   subredditHandle       String?
   admins                Admin[]
   moderators            Moderator[]
+  members               UserSubreddit[]
   posts                 Post[]
   ownerId               String
   user                  User        @relation(fields: [ownerId], references: [id])
+
+}
+
+model UserSubreddit {
+  id             String    @id @default(cuid())
+  createdAt      DateTime  @default(now())
+  userId         String
+  subredditId    String
+  user           User      @relation(fields: [userId], references: [id])
+  subreddit      Subreddit @relation(fields: [subredditId], references: [id])
+
+  @@unique([userId, subredditId])
+  
 }

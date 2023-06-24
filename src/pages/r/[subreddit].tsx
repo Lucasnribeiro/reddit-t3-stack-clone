@@ -1,4 +1,5 @@
 import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, InferGetStaticPropsType, NextPage } from "next"
+import { useSession } from "next-auth/react"
 import CreatePostCreateCommunityCard from "~/components/CreatePostCreateCommunityCard"
 import PopularPosts from "~/components/PopularPosts"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
@@ -6,8 +7,22 @@ import { ssrHelper } from "~/server/api/ssrHelper"
 import { api } from "~/utils/api"
 
 const Subreddit: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>>= ({ subreddit }) => {
-
+    const { data: session, status } = useSession();
     const { data: subredditQuery } = api.subreddit.get.useQuery({ title: subreddit})
+
+    const trpc = api.useContext()
+
+    const { mutate: joinSubreddit }  = api.subreddit.joinSubreddit.useMutation({
+        onSettled: async () => {
+          await trpc.subreddit.get.invalidate()
+        }
+    })
+
+    const { mutate: leaveSubreddit }  = api.subreddit.leaveSubreddit.useMutation({
+        onSettled: async () => {
+          await trpc.subreddit.get.invalidate()
+        }
+    })
 
     return (
         <>  
@@ -25,9 +40,31 @@ const Subreddit: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
                         <p className="text-slate-500">r/{subredditQuery?.title}</p>
                     </div>
                     <div className="pl-10">
-                        <button className="h-2/5 px-8 py-1 font-bold text-white bg-blue-500 rounded-3xl focus:outline-none hover:bg-blue-600">
-                            Join
-                        </button>
+                        {subredditQuery ?
+                            subredditQuery.members.some((item) => item.userId === session?.user.id) ? 
+                                                            
+                                <button onClick={() => leaveSubreddit({subredditId: subredditQuery?.id})} className="h-2/5 px-8 py-2 font-bold text-blue-500 bg-transparent border border-blue-500 rounded-3xl focus:outline-none hover:bg-blue-600 hover:text-white transition-colors duration-300 group">
+                                    <span className="group-hover:hidden">
+                                        Joined
+                                    </span>
+                                    <span className="hidden group-hover:inline-block">
+                                        Leave
+                                    </span>
+                                </button>
+
+                                :
+                                <button 
+                                    className="h-2/5 px-8 py-1 font-bold text-white bg-blue-500 rounded-3xl focus:outline-none hover:bg-blue-600"
+                                    onClick={() => joinSubreddit({subredditId: subredditQuery?.id})}
+                                >
+                                    Join
+                                </button>
+
+                            :
+
+                            null
+
+                        }
                     </div>
                 </div>
             </div>

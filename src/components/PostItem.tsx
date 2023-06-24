@@ -1,14 +1,46 @@
 import { faAward, faBookmark, faChevronDown, faChevronUp, faEllipsis, faShare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import React from 'react';
+import React, {useState} from 'react';
 import { faMessage } from '@fortawesome/free-regular-svg-icons';
 import type { Post } from '@/src/types'
 import DOMPurify from 'dompurify';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import { api } from '~/utils/api';
 
 
 const PostItem = (props : Post) => {
+  const { data: session, status } = useSession();
+  const [ upvote, setUpvote ] = useState(props.upvotes.some((item) => item.userId === session?.user.id ));
+  const [ downvote, setDownvote ] = useState(props.downvotes.some((item) => item.userId === session?.user.id ));
+  const [ currentInteractions, setCurrentInteractions ] = useState(Object.keys(props.upvotes).length - Object.keys(props.downvotes).length)
+
+  const trpc = api.useContext()
+
+  const { mutate: upvotePost }  = api.post.upvotePost.useMutation({
+      onSettled: async () => {
+        await trpc.post.getBatch.invalidate()
+      }
+  })
+
+  const { mutate: unUpovotePost }  = api.post.unUpovotePost.useMutation({
+      onSettled: async () => {
+        await trpc.post.getBatch.invalidate()
+      }
+  })
+
+  const { mutate: downvotePost }  = api.post.downvotePost.useMutation({
+    onSettled: async () => {
+      await trpc.post.getBatch.invalidate()
+    }
+  })
+
+  const { mutate: unDownvotePost }  = api.post.unDownvotePost.useMutation({
+    onSettled: async () => {
+      await trpc.post.getBatch.invalidate()
+    }
+  })
 
   const interactions = [
     {id: '1', icon: faMessage, name: 'Comments' },
@@ -21,15 +53,73 @@ const PostItem = (props : Post) => {
   return (
     <div className="border border-solid border-gray-400 bg-white rounded shadow flex">
       <div className="flex flex-col place-items-center text-2xl p-2 bg-gray-100 justify-top">
-        <div>
-          <FontAwesomeIcon icon={faChevronUp} className="hover:text-red-500" />
-        </div>
+        {
+          upvote ?
+
+            <div>
+              <FontAwesomeIcon onClick={() => { 
+                    unUpovotePost({postId: props.id});
+                    setUpvote(false);
+                    setCurrentInteractions((prevInteractions) => Math.max(prevInteractions - 1, 0));
+                  }
+                } 
+                icon={faChevronUp} className="text-red-500 hover:text-slate-200" 
+              />
+            </div>
+          :
+
+            <div>
+              <FontAwesomeIcon onClick={() => {
+                    upvotePost({postId: props.id});
+                    if (downvote) {
+                      unDownvotePost({ postId: props.id });
+                      setDownvote(false);
+                      setCurrentInteractions(currentInteractions + 1);
+                    }
+                    setUpvote(true);
+                    setCurrentInteractions((prevInteractions) => prevInteractions + 1);
+                  }
+                } 
+                icon={faChevronUp} className="hover:text-red-500" 
+              />
+            </div>
+        }
         <div className=" font-bold text-sm">
-          {Object.keys(props.upvotes).length}
+          {currentInteractions}
         </div>
-        <div>
-        <FontAwesomeIcon icon={faChevronDown} className="hover:text-red-500" />
-        </div>
+        {
+          downvote ? 
+
+              <div>
+                <FontAwesomeIcon onClick={() => {
+                      unDownvotePost({postId: props.id});
+                      setDownvote(false);
+                      setUpvote(true)
+                      setCurrentInteractions((prevInteractions) => Math.max(prevInteractions - 1, 0));
+                    }
+                  } 
+                  icon={faChevronDown} className="text-red-500 hover:text-slate-200" 
+                  />
+              </div>
+
+            :
+
+              <div>
+                <FontAwesomeIcon onClick={() => {
+                      downvotePost({postId: props.id});
+                      if (upvote) {
+                        unUpovotePost({ postId: props.id });
+                        setUpvote(false);
+                        setCurrentInteractions(currentInteractions - 1);
+                      }
+                      setDownvote(true);
+                      setCurrentInteractions((prevInteractions) => prevInteractions - 1);
+                    }
+                  } 
+                  icon={faChevronDown} className="hover:text-red-500" 
+                  />
+              </div>
+        }
       </div>
       <div className="flex flex-col pl-4 pt-2">
         <div className="flex place-items-center space-x-2">

@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 
 export const subredditRouter = createTRPCRouter({
+
   all: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.subreddit.findMany({
         select: {
@@ -35,6 +36,16 @@ export const subredditRouter = createTRPCRouter({
               user: true,
               admins: true,
               moderators: true,
+              members: true,
+              /* this can be optimized by not returning all members: 
+                members: {
+                  select: {
+                    id: true,
+                  },
+                  where: { id: currentUserID },
+                  take: 1,
+                },
+              */
               
           },
           where: {
@@ -99,4 +110,37 @@ export const subredditRouter = createTRPCRouter({
         nextCursor,
       };
     }),
+
+    joinSubreddit: protectedProcedure
+    .input(
+      z.object({
+        subredditId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+        await ctx.prisma.userSubreddit.create({
+          data: {
+            userId: ctx.session.user.id,
+            subredditId: input.subredditId,
+          },
+        });
+    }),
+
+    leaveSubreddit: protectedProcedure
+    .input(
+      z.object({
+        subredditId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+        await ctx.prisma.userSubreddit.delete({
+          where: {
+              userId_subredditId: {
+                userId: ctx.session.user.id,
+                subredditId: input.subredditId
+              }
+          }
+        });
+    }),
+
 });
