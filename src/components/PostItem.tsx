@@ -47,7 +47,10 @@ const PostItem = (props : Post) => {
         </div>
         <div 
           dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(props.content.substring(0, 500)) }} 
-          style={{WebkitMaskImage: 'linear-gradient(180deg, #000 20%, transparent)', maxHeight: '120px'}} 
+          style= {{
+            WebkitMaskImage: props.content.length >= 500  ? 'linear-gradient(180deg, #000 20%, transparent)' : '', 
+            maxHeight: '120px'
+          }} 
           className='pb-2 pr-8'
         >
         
