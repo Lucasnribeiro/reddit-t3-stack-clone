@@ -76,7 +76,7 @@ const PostItem = (props : Post) => {
                       setDownvote(false);
                       setCurrentInteractions(currentInteractions + 1);
                     }
-                    setUpvote(true);
+                    setUpvote(true)
                     setCurrentInteractions((prevInteractions) => prevInteractions + 1);
                   }
                 } 
@@ -94,7 +94,6 @@ const PostItem = (props : Post) => {
                 <FontAwesomeIcon onClick={() => {
                       unDownvotePost({postId: props.id});
                       setDownvote(false);
-                      setUpvote(true)
                       setCurrentInteractions((prevInteractions) => Math.max(prevInteractions - 1, 0));
                     }
                   } 
@@ -112,7 +111,7 @@ const PostItem = (props : Post) => {
                         setUpvote(false);
                         setCurrentInteractions(currentInteractions - 1);
                       }
-                      setDownvote(true);
+                      setDownvote(true)
                       setCurrentInteractions((prevInteractions) => prevInteractions - 1);
                     }
                   } 
