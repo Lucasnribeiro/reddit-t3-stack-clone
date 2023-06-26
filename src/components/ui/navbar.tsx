@@ -110,7 +110,7 @@ const Navbar = () => {
                     <DropdownMenuContent>
                       <DropdownMenuLabel><div>My Account</div></DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <div onClick={() => router.push(`/u/${session.user?.name}`)}><DropdownMenuItem className="cursor-pointer">Profile</DropdownMenuItem></div>
+                      <div onClick={() => router.push(`/u/${session?.user?.name ?? ''}`)}><DropdownMenuItem className="cursor-pointer">Profile</DropdownMenuItem></div>
                       <div onClick={() => signOut()}><DropdownMenuItem className="cursor-pointer">Logout</DropdownMenuItem></div>
                     </DropdownMenuContent>
 
