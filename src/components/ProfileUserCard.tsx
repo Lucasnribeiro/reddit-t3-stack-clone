@@ -1,19 +1,21 @@
 import { faCamera, faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useCallback, useState } from "react";
+import React, { ChangeEvent, useCallback, useState } from "react";
 
 const ProfileUserCard = () => {
 
     const [file, setFile] = useState<File[]>([]);
 
-    const handleFileChange = (event: any) => {
-        const selectedFile = event.target.files[0];
-        setFile([selectedFile]);
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const selectedFile = event.target?.files?.[0]
+        if( selectedFile ){
+            setFile([selectedFile]);
+        }
       };
 
-    const uploadSomeFiles = async () => {
+    // const uploadSomeFiles = async () => {
         
-    };
+    // };
 
     return (
         <div className="dark:!bg-navy-800 rounded-lg shadow-shadow-500 shadow-3xl relative mx-auto flex w-full max-w-[550px] flex-col items-center bg-white bg-cover bg-clip-border  dark:text-white dark:shadow-none">
