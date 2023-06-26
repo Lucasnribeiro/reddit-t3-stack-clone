@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Link from 'next/link';
 import SelectSubreddit from '../SelectSubreddit';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './dropdownMenu';
-import { Router, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
 const Navbar = () => {
   const { data: session, status } = useSession();
@@ -85,31 +85,38 @@ const Navbar = () => {
         <div className="flex space-x-2 items-center rounded px-2 hover:bg-gray-200">
           <div className="text-xs">
           {session ? (
+              <div >
                 <DropdownMenu>
-                  <DropdownMenuTrigger>            
-                    <div className='flex space-x-1'>
-                    <Avatar style={{width: 20, height: 20}}>
-                        <AvatarImage src={session.user.image ?? '/images/placeholder-avatar.png'}/>
-                        <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    <div>@{session.user?.name}</div>
-                    {/* 
-                    <div className="flex items-center space-x-1">
-                      <div>
-                        <FontAwesomeIcon icon={faReddit} className="text-red-600" />
-                      </div>
-                      <div>1.8k karma</div>
+                  <DropdownMenuTrigger>      
+                    <div className="flex">     
+                      <div className='flex space-x-1'>
+                      <Avatar style={{width: 20, height: 20}}>
+                          <AvatarImage src={session.user.image ?? '/images/placeholder-avatar.png'}/>
+                          <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                      <div>@{session.user?.name}</div>
+                      {/* 
+                      <div className="flex items-center space-x-1">
+                        <div>
+                          <FontAwesomeIcon icon={faReddit} className="text-red-600" />
+                        </div>
+                        <div>1.8k karma</div>
+                      </div> 
+                      */}
+                    </div>
+                      <FontAwesomeIcon className="ml-2" icon={faCaretDown} />
                     </div> 
-                    */}
-                  </div>
                   </DropdownMenuTrigger>
                     <DropdownMenuContent>
                       <DropdownMenuLabel><div>My Account</div></DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <div onClick={() => router.push('/profile')}><DropdownMenuItem className="cursor-pointer">Profile</DropdownMenuItem></div>
+                      <div onClick={() => router.push(`/u/${session.user?.name}`)}><DropdownMenuItem className="cursor-pointer">Profile</DropdownMenuItem></div>
                       <div onClick={() => signOut()}><DropdownMenuItem className="cursor-pointer">Logout</DropdownMenuItem></div>
                     </DropdownMenuContent>
+
                   </DropdownMenu>
+
+                </div>
             ) : (
               <button
                 type="button"

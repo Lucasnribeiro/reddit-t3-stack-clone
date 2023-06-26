@@ -103,7 +103,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext<{ su
         props: {
             trpcState: ssr.dehydrate(),
             subreddit,
-            hey: 'hey'
         }
     };
 }
