@@ -76,7 +76,7 @@ export const subredditRouter = createTRPCRouter({
     }),
 
 
-    getBatch: protectedProcedure
+    getBatch: publicProcedure
     .input(
       z.object({
         limit: z.number(),

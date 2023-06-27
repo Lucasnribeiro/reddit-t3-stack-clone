@@ -20,25 +20,25 @@ const PostItem = (props : Post) => {
 
   const { mutate: upvotePost }  = api.post.upvotePost.useMutation({
       onSettled: async () => {
-        await trpc.post.getBatch.invalidate()
+        // await trpc.post.getBatch.invalidate()
       }
   })
 
   const { mutate: unUpovotePost }  = api.post.unUpovotePost.useMutation({
       onSettled: async () => {
-        await trpc.post.getBatch.invalidate()
+        // await trpc.post.getBatch.invalidate()
       }
   })
 
   const { mutate: downvotePost }  = api.post.downvotePost.useMutation({
     onSettled: async () => {
-      await trpc.post.getBatch.invalidate()
+      // await trpc.post.getBatch.invalidate()
     }
   })
 
   const { mutate: unDownvotePost }  = api.post.unDownvotePost.useMutation({
     onSettled: async () => {
-      await trpc.post.getBatch.invalidate()
+      // await trpc.post.getBatch.invalidate()
     }
   })
 
@@ -52,7 +52,7 @@ const PostItem = (props : Post) => {
 
   return (
 
-    <div className="border border-solid border-gray-400 bg-white rounded shadow flex">
+    <div key={props.id} className="border border-solid border-gray-400 bg-white rounded shadow flex">
       <div className="flex flex-col place-items-center text-2xl p-2 bg-gray-100 justify-top">
         {
           upvote ?
@@ -76,7 +76,6 @@ const PostItem = (props : Post) => {
                     if (downvote) {
                       unDownvotePost({ postId: props.id });
                       setDownvote(false);
-                      setCurrentInteractions(currentInteractions + 1);
                     }
                     setUpvote(true)
                     setCurrentInteractions((prevInteractions) => prevInteractions + 1);
@@ -97,7 +96,7 @@ const PostItem = (props : Post) => {
                 <FontAwesomeIcon onClick={() => {
                       unDownvotePost({postId: props.id});
                       setDownvote(false);
-                      setCurrentInteractions((prevInteractions) => Math.max(prevInteractions - 1, 0));
+                      setCurrentInteractions((prevInteractions) => Math.max(prevInteractions + 1, 0));
                     }
                   } 
                   icon={faChevronDown} 
@@ -113,7 +112,6 @@ const PostItem = (props : Post) => {
                       if (upvote) {
                         unUpovotePost({ postId: props.id });
                         setUpvote(false);
-                        setCurrentInteractions(currentInteractions - 1);
                       }
                       setDownvote(true)
                       setCurrentInteractions((prevInteractions) => prevInteractions - 1);
