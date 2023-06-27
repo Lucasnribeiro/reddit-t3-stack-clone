@@ -2,16 +2,7 @@ import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-
-interface ModalButtonProps {
-  modalTitle: string;
-  className: string;
-  children: React.ReactNode;
-  actionText: string;
-  buttonText: string;
-  // I really don't know how to type this
-  onSubmit: (data: any) => any;
-}
+import { ModalButtonProps } from '~/types';
 
 const ModalButton: React.FC<ModalButtonProps> = ({modalTitle, children, actionText, buttonText, onSubmit, ...props}) => {
   const [isOpen, setIsOpen] = useState(false);

@@ -25,7 +25,35 @@ export const userRouter = createTRPCRouter({
         });
     }),
 
-
+    all: publicProcedure
+    .input(
+      z.object({
+        username: z.string().optional()
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { username } = input
+      const users = await ctx.prisma.user.findMany({
+          select: {
+              id: true,
+              name: true,
+              comments: true,
+              upvotes: true,
+              downvotes: true,
+              subreddits: true,
+              image: true,
+              posts: true,
+          },
+          where:{
+            name: {
+              contains: username ? username : undefined,
+              mode: 'insensitive'
+            }
+          },
+      });
+  
+      return users
+    }),
 
 
 })

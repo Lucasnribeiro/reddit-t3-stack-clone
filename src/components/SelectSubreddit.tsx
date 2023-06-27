@@ -2,15 +2,12 @@ import React, {useState} from 'react'
 import { useSession } from 'next-auth/react';
 import Select from 'react-select';
 import { api } from '~/utils/api';
-
-interface SelectSubredditProps {
-    setSubreddit: (subreddit: string) => string | void,
-    optionValue: string,
-}
+import { SelectSubredditProps } from '~/types';
 
 const SelectSubreddit: React.FC<SelectSubredditProps> = ({setSubreddit, optionValue, ...props}) => {
     const { data: session, status } = useSession();
     const [page, setPage] = useState(0);  
+
     const { data: subreddits, isLoading, fetchNextPage } = api.subreddit.getBatch.useInfiniteQuery(
         {
             limit: 10,
@@ -31,7 +28,7 @@ const SelectSubreddit: React.FC<SelectSubredditProps> = ({setSubreddit, optionVa
         <Select
             {...props}
             options={options}
-            onChange={(selectedOption) => setSubreddit(selectedOption ? selectedOption.id : '')}
+            onChange={(selectedOption) => { if(selectedOption) setSubreddit(optionValue === 'id' ? selectedOption.id : selectedOption.title)} }
             isSearchable
             onMenuScrollToBottom={handleFetchNextPage}
             getOptionLabel={(option) => 'r/' + option.title}

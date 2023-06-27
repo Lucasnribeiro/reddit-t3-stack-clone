@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { signIn, signOut, useSession } from "next-auth/react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faCaretDown, faCircleArrowUp, faMessage, faBell, faPlus, faBullhorn } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faCircleArrowUp, faMessage, faBell, faPlus, faBullhorn } from '@fortawesome/free-solid-svg-icons';
 import { faReddit } from '@fortawesome/free-brands-svg-icons'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Link from 'next/link';
 import SelectSubreddit from '../SelectSubreddit';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './dropdownMenu';
 import { useRouter } from 'next/router';
+import SearchBar from '../SearchBar';
 
 const Navbar = () => {
   const { data: session, status } = useSession();
@@ -17,6 +18,14 @@ const Navbar = () => {
   const commonOptions = [faCircleArrowUp, faReddit];
 
   const actions = [faMessage, faBell, faPlus];
+
+  useEffect( () => {
+    if(subreddit != ''){
+      router.push(`/r/${subreddit}`).catch((error) =>
+        console.log(error)
+      )
+    }
+  }, [subreddit])
 
   return (
     <div className="bg-white w-full py-2 px-2 flex items-center justify-evenly shadow z-10">
@@ -35,14 +44,7 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center bg-gray-100 rounded w-60 lg:w-80">
-        <div className="pl-4 pr-2">
-          <FontAwesomeIcon icon={faSearch} />
-        </div>
-        <input
-          type="text"
-          placeholder="Search"
-          className="bg-gray-100 py-2 rounded outline-none"
-        />
+        <SearchBar />
       </div>
 
       <div className="flex divide-x divide-gray-200 xl:divide-x xl:divide-gray-200">

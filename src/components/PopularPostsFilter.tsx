@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import { faRocket, faFire, faCertificate, faTableColumns, faCaretDown, faSquarePollVertical, faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-interface PopularPostsFilterProps {
-    onFilterChange: (filter: string) => void;
-}
+import { PopularPostsFilterProps } from '~/types';
 
 const PopularPostsFilter: React.FC<PopularPostsFilterProps> = ({ onFilterChange }) => {
-  const [activeFilter, setActiveFilter] = useState('Best');
+  const [activeFilter, setActiveFilter] = useState('New');
 
   const popularItems = [
     { name: 'Best', icon: faRocket, caretDown: true },

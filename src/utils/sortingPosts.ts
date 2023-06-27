@@ -46,7 +46,7 @@ export const sortPostsByHot = (posts: Post[]): Post[] => {
     const upvotes: number = post.upvotes.length || 0;
     const downvotes: number = post.downvotes.length || 0;
     const comments: number = post.comments.length || 0;
-    const createdAt: number = (post.createdAt as Date).getTime() / 1000;
+    const createdAt = post.createdAt.getTime() / 1000;
 
     const now: number = Date.now() / 1000; // Current timestamp in seconds
   
@@ -84,4 +84,9 @@ const calculateScoreByTop = (post: Post): number => {
 
     return score;
 };
+
+export const sortPostsByNew = (posts: Post[]): Post[] => {
+
+    return posts
+}
 

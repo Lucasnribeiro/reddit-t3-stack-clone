@@ -3,8 +3,15 @@ import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 
 export const postRouter = createTRPCRouter({
 
-  all: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.post.findMany({
+  all: publicProcedure
+  .input(
+    z.object({
+      postTitle: z.string().optional()
+    })
+  )
+  .query(async ({ ctx, input }) => {
+    const { postTitle } = input
+    const posts = await ctx.prisma.post.findMany({
         select: {
             id: true,
             createdAt: true,
@@ -16,10 +23,18 @@ export const postRouter = createTRPCRouter({
             downvotes: true,
             subreddit: true,
         },
+        where:{
+          title: {
+            contains: postTitle ? postTitle : undefined,
+            mode: 'insensitive'
+          }
+        },
         orderBy: {
             createdAt: "desc",
         },
     });
+
+    return posts
   }),
     
   create: protectedProcedure

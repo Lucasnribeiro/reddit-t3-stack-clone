@@ -6,6 +6,7 @@ import PopularPosts from "~/components/PopularPosts"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { ssrHelper } from "~/server/api/ssrHelper"
 import { api } from "~/utils/api"
+import Head from 'next/head'
 
 const Subreddit: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>>= ({ subreddit }) => {
     const { data: session, status } = useSession();
@@ -28,6 +29,10 @@ const Subreddit: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
 
     return (
         <>  
+            <Head>
+                <title>/r/{subredditQuery?.title}</title>
+            </Head>
+
             <div className="bg-white">
                 <div className="bg-slate-300 h-56 w-full">
 

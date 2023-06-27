@@ -1,12 +1,6 @@
 import React, {useRef, useEffect } from 'react' 
 import { useIsVisible } from '~/hooks/useVisible';
-
-interface ScrollTriggerComponentProps {
-    callFunction: () => any,
-    isFetchingNextPage:  boolean,
-    hasNextPage: boolean | undefined
-}
-
+import { ScrollTriggerComponentProps } from '~/types';
 
 const ScrollTriggerComponent : React.FC<ScrollTriggerComponentProps> = ({callFunction, isFetchingNextPage, hasNextPage}) => {
     const ref = useRef<HTMLDivElement>(null);

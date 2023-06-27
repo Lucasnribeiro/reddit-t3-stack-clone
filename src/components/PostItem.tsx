@@ -133,7 +133,7 @@ const PostItem = (props : Post) => {
             </Avatar>
             <Link href={`/r/${props.subreddit.title}`}><div className="font-bold">r/{props.subreddit.title}</div></Link> 
             <div className="font-thin text-gray-600">
-              Posted by {props.user.name} {new Date(props.createdAt).toString()}
+              Posted by <Link href={`/u/${props.user.name}`}> {props.user.name} </Link> {new Date(props.createdAt).toString()}
             </div>
           </div>
           <div className="text-2xl font-bold py-4">

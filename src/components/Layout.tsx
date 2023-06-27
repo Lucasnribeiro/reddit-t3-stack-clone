@@ -1,11 +1,7 @@
-import React, {ReactNode} from 'react'
 import Navbar from './ui/navbar'
+import { LayoutProps } from '~/types'
 
-interface Props {
-    children?: ReactNode
-}
-
-function Layout({children}: Props){
+function Layout({children}: LayoutProps){
 
     return (
         <>

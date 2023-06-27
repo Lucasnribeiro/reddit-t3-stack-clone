@@ -6,8 +6,7 @@ import { ssrHelper } from "~/server/api/ssrHelper";
 import { api } from "~/utils/api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ProfileUserCard from "~/components/ProfileUserCard";
-
-
+import Head from "next/head";
 
 const User: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ user }) => {
     const { data: session, status } = useSession();
@@ -15,6 +14,9 @@ const User: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
     return (
     <>
+        <Head>
+            <title>{userQuery?.title}</title>
+        </Head>
         <div className=" border-t-2"> 
             <Tabs defaultValue="account" className=" pt-5 pb-7 mx-auto max-w-6xl lg:max-w-7xl xl:max-w-8xl">
                 <TabsList className="">

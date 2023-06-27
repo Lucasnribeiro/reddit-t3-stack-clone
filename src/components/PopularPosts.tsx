@@ -5,16 +5,15 @@ import QuickNewPost from '~/components/QuickNewPost';
 import { api } from '~/utils/api';
 import PostItemSkeleton from './PostItemSkeleton';
 import ScrollTriggerComponent from './ScrollTriggerComponent';
-import { sortPostsByBest, sortPostsByHot, sortPostsByTop } from '~/utils/sortingPosts';
-import { Post } from '~/types';
+import { sortPostsByBest, sortPostsByHot, sortPostsByTop, sortPostsByNew } from '~/utils/sortingPosts';
+import { PopularPostsProps } from '~/types';
 
-interface PopularPostsProps {
-  subredditId?: string | undefined
-}
+
 
 const PopularPosts: React.FC<PopularPostsProps> = ({subredditId}) => {
   const [page, setPage] = useState(0);  
-  const [currentFilter, setCurrentFilter] = useState<string>('Best');
+  const [currentFilter, setCurrentFilter] = useState<string>('New');
+  
   const sortingFunction = () => {
     switch (currentFilter) {
       case 'Best':
@@ -22,11 +21,11 @@ const PopularPosts: React.FC<PopularPostsProps> = ({subredditId}) => {
       case 'Hot':
         return sortPostsByHot;
       case 'New':
-        return sortPostsByTop;
+        return sortPostsByNew;
       case 'Top':
         return sortPostsByTop;
       default:
-        return sortPostsByBest;
+        return sortPostsByNew;
     }
   };
 
@@ -63,7 +62,7 @@ const PopularPosts: React.FC<PopularPostsProps> = ({subredditId}) => {
           {
             posts?.pages?.map((currentPage) => 
               sortingFunction()(currentPage.items).map((post, index, array) => (
-                <PostItem {...post} />
+                <PostItem key={index} {...post} />
               )
             ))
           } 
