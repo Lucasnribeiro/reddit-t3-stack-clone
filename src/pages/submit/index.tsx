@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
+import CreateImagePost from '~/components/CreateImagePost';
 import RichTextEditor from "~/components/RichTextEditor";
 import SelectSubreddit from '~/components/SelectSubreddit';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 
 export default function Submit(){
     const [subreddit, setSubreddit] = useState('');
@@ -18,7 +20,21 @@ export default function Submit(){
                             <SelectSubreddit setSubreddit={setSubreddit} optionValue='id'/>
                         </div>
                     </div>
-                    <RichTextEditor subreddit={subreddit}/>
+                    <Tabs defaultValue="post" className="">
+                        <TabsList className="">
+                            <TabsTrigger value="post">POST</TabsTrigger>
+                            <TabsTrigger value="image">IMAGE</TabsTrigger>
+                        </TabsList>
+                        <div className="bg-gray-200">
+                            <TabsContent value="post">
+                                <RichTextEditor subreddit={subreddit}/>
+                            </TabsContent>
+                            <TabsContent value="image">
+                                <CreateImagePost subreddit={subreddit} />
+                            </TabsContent>
+                        </div>
+                    </Tabs>
+
                 </div>
                 <div className="hidden w-1/2 md:block">
 

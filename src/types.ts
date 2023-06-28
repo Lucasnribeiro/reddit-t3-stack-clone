@@ -3,8 +3,10 @@ import { z } from "zod";
 import { RouterOutputs } from "./utils/api";
 
 type allPostsOutput = RouterOutputs["post"]["all"]
+type ImagesOutput = RouterOutputs["post"]["uploadImage"]
 
 export type Post = allPostsOutput[number];
+export type Image = ImagesOutput["image"];
 
 export interface CreateCommunityFormValues {
     title: string;

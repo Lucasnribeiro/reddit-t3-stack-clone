@@ -1,5 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
+import { s3 } from "~/utils/s3";
+import { PresignedPost } from "aws-sdk/clients/s3";
 
 export const postRouter = createTRPCRouter({
 
@@ -43,10 +45,11 @@ export const postRouter = createTRPCRouter({
       title: z.string(),
       content: z.string(),
       subredditId: z.string(),
+      images: z.array(z.string()).max(4).optional()
     })
   )
   .mutation(async ({ ctx, input }) => {
-      await ctx.prisma.post.create({
+      const post = await ctx.prisma.post.create({
         data: {
           title: input.title,
           content: input.content,
@@ -54,6 +57,55 @@ export const postRouter = createTRPCRouter({
           subredditId: input.subredditId
         },
       });
+
+      if(input.images){
+        input.images.map( async (imageId) => {
+          await ctx.prisma.postImage.update({
+            where: {
+              id: imageId
+            },
+            data: {
+              postId: post.id
+            }
+          })
+        })
+      }
+  }),
+
+  uploadImage: protectedProcedure
+  .input(
+    z.object({
+      image: z.string().url(),
+    })
+  )
+  .mutation( async ({ ctx, input }) => {
+      const image = await ctx.prisma.postImage.create({
+        data:{
+          userId: ctx.session.user.id,
+        }
+      })
+      
+      const promise = new Promise<PresignedPost> ((resolve, reject) => {
+        s3.createPresignedPost({
+          Fields:{ 
+            key: `images/${ctx.session.user.id}/${image.id}`
+          }, 
+          Conditions: [
+
+          ], 
+          Expires: 90,
+          Bucket: 'react-clone-bucket',
+
+        }, (error, signed) => {
+          if (error) return reject(error);
+          resolve(signed)
+        })
+      })
+
+      return {
+        promise: promise,
+        image: image
+      }
   }),
 
   getBatch: publicProcedure
