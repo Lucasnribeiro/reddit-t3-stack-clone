@@ -1,12 +1,22 @@
 import React, { useState } from 'react' 
 import { faSearch } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import Select, { OnChangeValue, StylesConfig } from 'react-select';
+import Select, { ActionMeta, StylesConfig } from 'react-select';
 import { api } from '~/utils/api';
-import { Post, SearchResult } from '~/types';
+import { Post } from '~/types';
+import { useRouter } from 'next/router';
+import { Url } from 'url';
 
+type OptionType = {
+    label: string,
+    options: {
+        value: string;
+        label: string;
+        link: string;
+    }[]
+  };
 
-const customStyles: StylesConfig = {
+const customStyles: StylesConfig<OptionType, true> = {
     control: (provided, state) => ({
       ...provided,
       backgroundColor: 'white',
@@ -41,7 +51,8 @@ const customStyles: StylesConfig = {
 
 const SearchBar = () => {
     const [query, setQuery] = useState('');
-    const trpc = api.useContext()
+    const router = useRouter()
+
 
     const { data: postsQuery, isFetching: isFetchingPosts } = api.post.all.useQuery<Post[]>({postTitle: query}, { enabled: query.length > 0});
     const { data: usersQuery, isFetching: isFetchingUsers } = api.user.all.useQuery({username: query}, { enabled: query.length > 0});
@@ -51,6 +62,7 @@ const SearchBar = () => {
     ? postsQuery.map((result) => ({
         value: result.id,
         label: result.title,
+        link: result.subreddit.title && result.id ? `/r/${result.subreddit.title}/posts/${result.id}` : '',
         }))
     : [];
 
@@ -58,6 +70,7 @@ const SearchBar = () => {
     ? usersQuery.map((result) => ({
         value: result.id,
         label: result.name || '',
+        link: result.name ?  `/u/${result.name}` : ''
         }))
     : [];
 
@@ -65,10 +78,11 @@ const SearchBar = () => {
     ? subredditQuery.map((result) => ({
         value: result.id,
         label: result.title,
+        link:  result.title ? `/r/${result.title}` : '',
         }))
     : [];
 
-    const options = [
+    const options: readonly OptionType[] = [
         {
             label: 'Posts', 
             options: postResults
@@ -90,15 +104,24 @@ const SearchBar = () => {
         setQuery(newValue);
     };
 
-    const handleSelectChange = (selectedOption: OnChangeValue<{ value: string; label: string }, false>) => {
-        setQuery(selectedOption ? (selectedOption as { value: string }).value : '');
-    };
+    const handleOptionChange = (option: readonly OptionType[], actionMeta: ActionMeta<OptionType>) => {
+        if (option) {
+            
+            //im doing this because types are really messy and im 100% sure that option.link is a property
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/no-unsafe-argument
+            // @ts-ignore
+            router.push(option.link as Url).catch((error) => 
+              console.log(error)
+            )
+        }
+    }
 
     return (
         <>
             <Select
                 options={options}
                 onInputChange={handleInputChange}
+                onChange={handleOptionChange}
                 placeholder="Search"
                 styles={customStyles}
                 noOptionsMessage={() => query.length >= 0 ?  'Search for posts, users or Subreddits' : 'No results found'}
