@@ -3,18 +3,9 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Select, { ActionMeta, StylesConfig } from 'react-select';
 import { api } from '~/utils/api';
-import { Post } from '~/types';
+import { OptionType, Post } from '~/types';
 import { useRouter } from 'next/router';
 import { Url } from 'url';
-
-type OptionType = {
-    label: string,
-    options: {
-        value: string;
-        label: string;
-        link: string;
-    }[]
-  };
 
 const customStyles: StylesConfig<OptionType, true> = {
     control: (provided, state) => ({

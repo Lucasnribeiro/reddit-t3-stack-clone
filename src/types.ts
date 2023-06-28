@@ -54,3 +54,12 @@ export interface SearchResult {
   id: string;
   title: string;
 }
+
+export type OptionType = {
+  label: string,
+  options: {
+      value: string;
+      label: string;
+      link: string;
+  }[]
+};
