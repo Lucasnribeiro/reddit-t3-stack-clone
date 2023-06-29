@@ -139,16 +139,28 @@ const PostItem = (props : Post) => {
           <div className="text-2xl font-bold py-4">
             {props.title}
           </div>
-          <div 
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(props.content.substring(0, 500)) }} 
-            style= {{
-              WebkitMaskImage: props.content.length >= 500  ? 'linear-gradient(180deg, #000 20%, transparent)' : '', 
-              maxHeight: '120px'
-            }} 
-            className='pb-2 pr-8'
-          >
-          
+          {
+            props.images.length > 0 ? 
+
+              props.images.map( (image) => 
+                <img key={image.id} className="h-auto max-w-full pb-2 pr-8" src={`https://react-clone-bucket.s3.amazonaws.com/images/${image.userId}/${image.id}`}></img>
+
+              )
+
+            :
+
+            <div 
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(props.content.substring(0, 500)) }} 
+              style= {{
+                WebkitMaskImage: props.content.length >= 500  ? 'linear-gradient(180deg, #000 20%, transparent)' : '', 
+                maxHeight: '120px'
+              }} 
+              className='pb-2 pr-8'
+            >
+
+
           </div>
+        }
         </Link>
         <div className="flex text-gray-500 space-x-4">
           {interactions.map((interaction) => (

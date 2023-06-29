@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 import { s3 } from "~/utils/s3";
 import { PresignedPost } from "aws-sdk/clients/s3";
+import { Image } from "~/types";
 
 export const postRouter = createTRPCRouter({
 
@@ -24,6 +25,7 @@ export const postRouter = createTRPCRouter({
             upvotes: true,
             downvotes: true,
             subreddit: true,
+            images: true
         },
         where:{
           title: {
@@ -91,7 +93,7 @@ export const postRouter = createTRPCRouter({
             key: `images/${ctx.session.user.id}/${image.id}`
           }, 
           Conditions: [
-
+            ["starts-with", "$Content-Type", ""],
           ], 
           Expires: 90,
           Bucket: 'react-clone-bucket',
@@ -102,10 +104,12 @@ export const postRouter = createTRPCRouter({
         })
       })
 
-      return {
-        promise: promise,
-        image: image
-      }
+      return await promise.then((result) => {
+        return {
+          promise: result,
+          image: image,
+        }
+      })
   }),
 
   getBatch: publicProcedure
@@ -139,6 +143,7 @@ export const postRouter = createTRPCRouter({
         upvotes: true,
         downvotes: true,
         subreddit: true,
+        images: true
       },
       where: {
         subredditId: subredditId ? subredditId : undefined,

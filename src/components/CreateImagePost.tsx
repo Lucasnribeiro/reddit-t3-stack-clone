@@ -11,7 +11,7 @@ const CreateImagePost =  ({subreddit}: {subreddit: string}) => {
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const [uploadStatus, setUploadStatus] = useState<boolean | null>(null);
+    const [uploadStatus, setUploadStatus] = useState<string>('pending');
     const [imageId, setImageId] = useState('');
     const [title, setTitle] = useState('');
 
@@ -21,11 +21,7 @@ const CreateImagePost =  ({subreddit}: {subreddit: string}) => {
         }
       })
 
-    const { mutateAsync: imageMutation, isSuccess } = api.post.uploadImage.useMutation({
-        onSettled: async () => {
-            
-        }
-    })
+    const { mutateAsync: imageMutation, isSuccess } = api.post.uploadImage.useMutation()
       
     const handleSave = () => {
 
@@ -48,36 +44,38 @@ const CreateImagePost =  ({subreddit}: {subreddit: string}) => {
                 setSelectedImage(reader.result as string);
 
                 await imageMutation({ image: reader.result as string})
-                .then(async (response: { promise: Promise<PresignedPost>, image: Image}) => {
-                    setImageId(response.image.id)
-                    try {
-                        var postData = new FormData()
-                        const presignedResponse = await response.promise
+                .then(async (response: { promise: PresignedPost, image: Image} | void) => {
 
-                        for(const key in presignedResponse.fields) { 
-                            postData.append(key, presignedResponse.fields[key] ?? '');
-                        }
-                        postData.append('file', file);
+                    if(response){
+                        setImageId(response.image ? response.image.id : '')
+                        try {
+                            const postData = new FormData()
+                            const presignedResponse = response.promise
 
-                        const upload = await fetch(presignedResponse.url, {
-                            method: "POST",
-                            body: postData,
-                        });
-                    
-                        if (upload.ok) {
-                            setUploadStatus(true)
-                        } else {
-                            setUploadStatus(false)
+                            for(const key in presignedResponse.fields) { 
+                                postData.append(key, presignedResponse.fields[key] ?? '');
+                            }
+                            postData.append('Content-Type', "image/jpeg");
+                            postData.append('file', file);
+
+                            const upload = await fetch(presignedResponse.url, {
+                                method: "POST",
+                                body: postData,
+                            });
+                        
+                            if (upload.ok) {
+                                setUploadStatus('uploaded')
+                            } else {
+                                setUploadStatus('error')
+                            }
+                        } catch (error) {
+                            console.error("Error uploading image:", error);
+                            setUploadStatus('error')
                         }
-                    } catch (error) {
-                        console.error("Error uploading image:", error);
-                        setUploadStatus(false)
                     }
                     
                 })
-                .catch(() => setUploadStatus(false))
-
-
+                .catch(() => setUploadStatus('error'))
             };
 
             reader.readAsDataURL(file);
@@ -91,12 +89,15 @@ const CreateImagePost =  ({subreddit}: {subreddit: string}) => {
     };
 
     const handleRemoveImage = () => {
+
         setSelectedImage(null);
-        setUploadStatus(false)
+        setUploadStatus('error')
         setImageId('')
+
         if (fileInputRef.current) {
           fileInputRef.current.value = ''; // Clear the file input value to allow selecting the same image again
         }
+
     };
 
     return (
@@ -117,7 +118,7 @@ const CreateImagePost =  ({subreddit}: {subreddit: string}) => {
                             <img src={selectedImage} alt="Preview" />
                         </div>
                         <div className="flex justify-end">
-                            {(uploadStatus === false)  && <span className="text-red-500">There was an error uploading the image. </span>}
+                            {(uploadStatus === 'error')  && <span className="text-red-500">There was an error uploading the image. </span>}
                             <button onClick={handleRemoveImage}><FontAwesomeIcon icon={faTrash}/></button>
                         </div>
                     </>
@@ -138,7 +139,7 @@ const CreateImagePost =  ({subreddit}: {subreddit: string}) => {
             <div className="flex justify-end mt-3">
                 <button
                 onClick={handleSave}
-                disabled={title.length === 0 && (uploadStatus === false || uploadStatus === null)}
+                disabled={title.length === 0 || uploadStatus === 'error' || uploadStatus === 'pending' || subreddit === ''}
                 className="flex items-center justify-center px-5 py-2 font-bold text-white bg-blue-500 rounded-3xl focus:outline-none hover:bg-blue-600 disabled:bg-slate-300"
                 >
                     Post

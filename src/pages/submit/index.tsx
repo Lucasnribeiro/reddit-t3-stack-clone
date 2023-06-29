@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React, {useState} from 'react'
 import CreateImagePost from '~/components/CreateImagePost';
 import RichTextEditor from "~/components/RichTextEditor";
@@ -6,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 
 export default function Submit(){
     const [subreddit, setSubreddit] = useState('');
+    const router = useRouter()
 
     return (
         <div className="flex flex-col pt-7 pb7 bg-gray-200 mx-auto min-h-screen max-w-6xl lg:max-w-7xl xl:max-w-8xl">
@@ -20,7 +22,7 @@ export default function Submit(){
                             <SelectSubreddit setSubreddit={setSubreddit} optionValue='id'/>
                         </div>
                     </div>
-                    <Tabs defaultValue="post" className="">
+                    <Tabs defaultValue={router.query.type == 'image' ? 'image' : 'post'} className="">
                         <TabsList className="">
                             <TabsTrigger value="post">POST</TabsTrigger>
                             <TabsTrigger value="image">IMAGE</TabsTrigger>

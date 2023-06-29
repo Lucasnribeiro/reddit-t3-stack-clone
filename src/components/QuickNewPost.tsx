@@ -21,7 +21,7 @@ const QuickNewPost = () => {
         onClick={() => router.push('/submit')}
       ></input>
       <div className="flex items-center ml-4 space-x-2">
-        <button className="p-2 rounded-md hover:bg-gray-200 focus:outline-none" onClick={() => router.push('/submit')}> <FontAwesomeIcon icon={faImage} /> </button>
+        <button className="p-2 rounded-md hover:bg-gray-200 focus:outline-none" onClick={() => router.push('/submit?type=image')}> <FontAwesomeIcon icon={faImage} /> </button>
         <button className="p-2 rounded-md hover:bg-gray-200 focus:outline-none" onClick={() => router.push('/submit')}> <FontAwesomeIcon icon={faLink} /> </button>
       </div>
     </div>
