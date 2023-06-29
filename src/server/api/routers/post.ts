@@ -77,7 +77,7 @@ export const postRouter = createTRPCRouter({
   uploadImage: protectedProcedure
   .input(
     z.object({
-      image: z.string().url(),
+      image: z.string().url().optional(),
     })
   )
   .mutation( async ({ ctx, input }) => {
@@ -88,20 +88,22 @@ export const postRouter = createTRPCRouter({
       })
       
       const promise = new Promise<PresignedPost> ((resolve, reject) => {
-        s3.createPresignedPost({
+
+         s3.createPresignedPost({
           Fields:{ 
             key: `images/${ctx.session.user.id}/${image.id}`
           }, 
           Conditions: [
-            ["starts-with", "$Content-Type", ""],
+            ["starts-with", "$Content-Type", "image/"],
           ], 
-          Expires: 90,
+          Expires: 900,
           Bucket: 'react-clone-bucket',
 
         }, (error, signed) => {
           if (error) return reject(error);
           resolve(signed)
         })
+
       })
 
       return await promise.then((result) => {
