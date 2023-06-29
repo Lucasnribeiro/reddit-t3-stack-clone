@@ -23,11 +23,7 @@ const CreateImagePost =  ({subreddit}: {subreddit: string}) => {
         }
       })
 
-    const { mutateAsync: imageMutation, error } = api.post.uploadImage.useMutation({
-        onError: async (e) => {
-            console.log(e)
-        }
-    })
+    const { mutateAsync: imageMutation, error } = api.post.uploadImage.useMutation()
       
     const handleSave = () => {
 
