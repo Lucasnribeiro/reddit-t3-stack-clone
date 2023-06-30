@@ -54,7 +54,7 @@ const PopularPosts: React.FC<PopularPostsProps> = ({subredditId}) => {
     <div className="flex flex-col space-y-4">
       <QuickNewPost />
       <PopularPostsFilter onFilterChange={handleFilterChange}/>
-      {isLoading || isFetching ? 
+      {isLoading || ( isFetching && !isFetchingNextPage ) ? 
         <PostItemSkeleton />
         :
         <>
