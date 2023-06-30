@@ -1,3 +1,5 @@
+import { faPerson } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/router';
 import React, {useState} from 'react'
 import CreateImagePost from '~/components/CreateImagePost';
@@ -38,8 +40,26 @@ export default function Submit(){
                     </Tabs>
 
                 </div>
-                <div className="hidden w-1/2 md:block">
-
+                <div className="hidden w-1/2 md:block mt-6">
+                    <div className="flex flex-col border border-solid border-gray-400 bg-white py-4 px-5 rounded shadow">
+                        <div className="flex space-x-5">
+                            <FontAwesomeIcon icon={faPerson}/>
+                            <span className="font-semibold text-lg">Posting to Reddit</span>
+                        </div>
+                        <div className="flex flex-col font-semibold">
+                            <div className="border-t border-gray-300 my-4"/>
+                            <span>1. Remember the human</span>
+                            <div className="border-t border-gray-300 my-4"/>
+                            <span>2. Behave like you would in real life</span>
+                            <div className="border-t border-gray-300 my-4"/>
+                            <span>3. Look for the original source of content</span>
+                            <div className="border-t border-gray-300 my-4"/>
+                            <span>4. Search for duplicates before posting</span>
+                            <div className="border-t border-gray-300 my-4"/>
+                            <span>5. Read the community’s rules</span>
+                            <div className="border-t border-gray-300 mt-4 mb-1"/>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
