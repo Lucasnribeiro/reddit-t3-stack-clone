@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, InferGetStaticPropsType, NextPage } from "next"
-import { useSession } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 import CreatePostCreateCommunityCard from "~/components/CreatePostCreateCommunityCard"
 import PopularPosts from "~/components/PopularPosts"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
@@ -67,8 +67,12 @@ const Subreddit: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
                                 <button 
                                     className="h-2/5 px-8 py-2 font-bold text-white bg-blue-500 rounded-3xl focus:outline-none hover:bg-blue-600"
                                     onClick={() => {
-                                            joinSubreddit({subredditId: subredditQuery?.id});
-                                            setMemberStatus(true);
+                                            if ( status == "unauthenticated" ){
+                                                signIn().catch(console.log);
+                                            }else{
+                                                joinSubreddit({subredditId: subredditQuery?.id});
+                                                setMemberStatus(true);
+                                            }
                                         }
                                     }
                                 >

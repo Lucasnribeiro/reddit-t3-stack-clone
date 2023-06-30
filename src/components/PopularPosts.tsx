@@ -7,11 +7,13 @@ import PostItemSkeleton from './PostItemSkeleton';
 import ScrollTriggerComponent from './ScrollTriggerComponent';
 import { sortPostsByBest, sortPostsByHot, sortPostsByTop, sortPostsByNew } from '~/utils/sortingPosts';
 import { PopularPostsProps } from '~/types';
+import { useSession } from 'next-auth/react';
 
 
 
 const PopularPosts: React.FC<PopularPostsProps> = ({subredditId}) => {
   const [page, setPage] = useState(0);  
+  const { data: session, status } = useSession();
   const [currentFilter, setCurrentFilter] = useState<string>('New');
   
   const sortingFunction = () => {
@@ -52,7 +54,8 @@ const PopularPosts: React.FC<PopularPostsProps> = ({subredditId}) => {
 
   return (
     <div className="flex flex-col space-y-4">
-      <QuickNewPost />
+      {status === "authenticated" && <QuickNewPost />}
+
       <PopularPostsFilter onFilterChange={handleFilterChange}/>
       {isLoading || ( isFetching && !isFetchingNextPage ) ? 
         <PostItemSkeleton />

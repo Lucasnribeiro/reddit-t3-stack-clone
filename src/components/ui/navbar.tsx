@@ -124,7 +124,7 @@ const Navbar = () => {
                 type="button"
                 className="mx-auto"
                 onClick={() => {
-                  signIn("discord").catch(console.log);
+                  signIn().catch(console.log);
                 }}
               >
                 <Avatar>

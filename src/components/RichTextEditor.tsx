@@ -57,7 +57,7 @@ const RichTextEditor = ({subreddit}: {subreddit: string}) => {
         <div className="flex justify-end mt-3">
             <button
             onClick={handleSave}
-            disabled={title.length == 0}
+            disabled={title.length == 0 || subreddit === ''}
             className="flex items-center justify-center px-5 py-2 font-bold text-white bg-blue-500 rounded-3xl focus:outline-none hover:bg-blue-600 disabled:bg-slate-300"
             >
                 Post

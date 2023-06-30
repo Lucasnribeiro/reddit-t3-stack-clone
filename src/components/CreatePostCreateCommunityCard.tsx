@@ -16,6 +16,7 @@ const CreatePostCreateCommunityCard : React.FC = () => {
   const { mutate }  = api.subreddit.create.useMutation({
     onSettled: async () => {
       await trpc.subreddit.all.invalidate()
+      await trpc.subreddit.getBatch.invalidate()
     }
   })
 
