@@ -6,7 +6,6 @@ import React, {useState} from 'react'
 import CreateImagePost from '~/components/CreateImagePost';
 import RichTextEditor from "~/components/RichTextEditor";
 import SelectSubreddit from '~/components/SelectSubreddit';
-import Spinner from '~/components/ui/Spinner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 
 export default function Submit(){

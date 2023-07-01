@@ -4,9 +4,11 @@ import { RouterOutputs } from "./utils/api";
 
 type allPostsOutput = RouterOutputs["post"]["all"]
 type ImagesOutput = RouterOutputs["postImage"]["get"]
+type CommentOutput = RouterOutputs["comment"]["get"]
 
 export type Post = allPostsOutput[number];
 export type Image = ImagesOutput;
+export type Comment = CommentOutput; 
 
 export interface CreateCommunityFormValues {
     title: string;

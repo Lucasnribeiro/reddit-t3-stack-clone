@@ -40,6 +40,46 @@ export const postRouter = createTRPCRouter({
 
     return posts
   }),
+
+  get: publicProcedure
+  .input(
+    z.object({
+      postId: z.string().optional()
+    })
+  )
+  .query(async ({ ctx, input }) => {
+    const { postId } = input
+    const post = await ctx.prisma.post.findFirst({
+        select: {
+            id: true,
+            createdAt: true,
+            title: true,
+            content: true,
+            user: true,
+            comments: {
+              include:{
+                downvotes: true,
+                user: true,
+                post: true,
+                upvotes: true,
+                _count: true
+              }
+            },
+            upvotes: true,
+            downvotes: true,
+            subreddit: true,
+            images: true
+        },
+        where:{
+          id: postId ? postId : undefined
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
+
+    return post
+  }),
     
   create: protectedProcedure
   .input(
@@ -141,7 +181,15 @@ export const postRouter = createTRPCRouter({
         title: true,
         content: true,
         user: true,
-        comments: true,
+        comments: {
+          include:{
+            downvotes: true,
+            user: true,
+            post: true,
+            upvotes: true,
+            _count: true
+          }
+        },
         upvotes: true,
         downvotes: true,
         subreddit: true,

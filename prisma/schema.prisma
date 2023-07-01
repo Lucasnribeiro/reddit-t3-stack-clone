@@ -112,7 +112,7 @@ model Upvote {
   id               String   @id @default(cuid())
   createdAt        DateTime @default(now())
   userId           String
-  postId           String
+  postId           String?
   commentId        String?
   post             Post?    @relation(name: "PostUpvotes", fields: [postId], references: [id], onDelete: Cascade)
   comment          Comment? @relation(name: "CommentUpvotes", fields: [commentId], references: [id], onDelete: Cascade)
@@ -127,7 +127,7 @@ model Downvote {
   id               String   @id @default(cuid())
   createdAt        DateTime @default(now())
   userId           String
-  postId           String
+  postId           String?
   commentId        String?
   post             Post?    @relation(name: "PostDownvotes", fields: [postId], references: [id], onDelete: Cascade)
   comment          Comment? @relation(name: "CommentDownvotes", fields: [commentId], references: [id], onDelete: Cascade)
