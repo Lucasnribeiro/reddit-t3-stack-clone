@@ -80,6 +80,23 @@ export const commentRouter = createTRPCRouter({
       });
   }),
 
+  reply: protectedProcedure
+  .input(
+    z.object({
+      content: z.string(),
+      parentId: z.string(),
+    })
+  )
+  .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.comment.create({
+        data: {
+          content: input.content,
+          userId: ctx.session.user.id,
+          parentId: input.parentId
+        },
+      });
+  }),
+
   getBatch: publicProcedure
   .input(
     z.object({

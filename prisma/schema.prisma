@@ -100,12 +100,14 @@ model Comment {
   createdAt        DateTime   @default(now())
   userId           String
   content          String     @db.Text()
-  postId           String
-  post             Post       @relation(fields: [postId], references: [id])
+  postId           String?
+  parentId         String?    
+  post             Post?      @relation(fields: [postId], references: [id])
+  parentComment    Comment?   @relation("ChildComments", fields: [parentId], references: [id]) 
   user             User       @relation(fields: [userId], references: [id])
   upvotes          Upvote[]   @relation("CommentUpvotes")
   downvotes        Downvote[] @relation("CommentDownvotes")
-
+  childComments    Comment[]  @relation("ChildComments") 
 }
 
 model Upvote {
