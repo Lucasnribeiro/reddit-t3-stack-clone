@@ -1,20 +1,16 @@
-import React, { useState } from 'react';
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSession } from "next-auth/react";
-import { api } from '~/utils/api';
+import { useState } from 'react';
 import { Subreddit } from '~/types';
+import { api } from '~/utils/api';
 
 
 
 export default function SubredditTitle(subreddit: Subreddit){
-    const { data: session, status } = useSession();
+    const { data: session } = useSession();
     const [ edit, setEdit ] = useState(false)
     const [editedTitle, setEditedTitle] = useState(subreddit.title)
-
-    console.log(subreddit)
-
-    const trpc = api.useContext()
 
     const { mutate } = api.subreddit.update.useMutation({
         onMutate: () => {

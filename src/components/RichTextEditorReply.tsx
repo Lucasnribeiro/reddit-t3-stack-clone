@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
-import QuillNoSSRWrapper from './lib/QuillNoSSRWrapper';
 import { api } from '~/utils/api';
+import QuillNoSSRWrapper from './lib/QuillNoSSRWrapper';
 
  const modules = {
     toolbar: [

@@ -1,15 +1,13 @@
-import React, {useState, useEffect} from 'react'
 import { GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next"
 import { signIn, useSession } from "next-auth/react"
+import Head from 'next/head'
+import { useEffect, useState } from 'react'
 import CreatePostCreateCommunityCard from "~/components/CreatePostCreateCommunityCard"
 import PopularPosts from "~/components/PopularPosts"
+import SubredditImage from '~/components/SubredditImage'
+import SubredditTitle from '~/components/SubredditTitle'
 import { ssrHelper } from "~/server/api/ssrHelper"
 import { api } from "~/utils/api"
-import Head from 'next/head'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {  faPen, faPencil, faUpload } from '@fortawesome/free-solid-svg-icons'
-import SubredditTitle from '~/components/SubredditTitle'
-import SubredditImage from '~/components/SubredditImage'
 
 const Subreddit: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>>= ({ subreddit }) => {
     const { data: session, status } = useSession();

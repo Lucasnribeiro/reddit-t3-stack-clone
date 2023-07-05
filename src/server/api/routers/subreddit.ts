@@ -1,8 +1,7 @@
+import { PresignedPost } from "aws-sdk/clients/s3";
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 import { s3 } from "~/utils/s3";
-import { PresignedPost, DeleteObjectOutput } from "aws-sdk/clients/s3";
-import { api } from "~/utils/api";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const subredditRouter = createTRPCRouter({
 
@@ -26,8 +25,13 @@ export const subredditRouter = createTRPCRouter({
             subredditHandle: true,
             posts: true,
             user: true,
-            ownerId: true
-
+            ownerId: true,
+            _count:{
+              select:{
+                posts: true,
+                members:true
+              }
+            },
         },
         where:{
           title: {
@@ -63,7 +67,6 @@ export const subredditRouter = createTRPCRouter({
       if(previousImage?.image){
         s3.deleteObject({ Bucket: 'react-clone-bucket', Key: `subreddit/${input.subredditId}/${previousImage.image}` }, (err, data) => {
             console.error(err);
-            console.log(data);
         });
       }
 
@@ -108,6 +111,7 @@ export const subredditRouter = createTRPCRouter({
       z.object({
         title: z.string().optional(),
         subredditHandle: z.string().optional(),
+        subredditId: z.string().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -124,6 +128,12 @@ export const subredditRouter = createTRPCRouter({
               posts: true,
               moderators: true,
               members: true,
+              _count:{
+                select:{
+                  posts: true,
+                  members:true
+                }
+              },
               /* this can be optimized by not returning all members: 
                 members: {
                   select: {
@@ -137,6 +147,7 @@ export const subredditRouter = createTRPCRouter({
           },
           where: {
             title: input.title ? input.title : undefined,
+            id: input.subredditId ? input.subredditId : undefined,
             subredditHandle: input.subredditHandle ? input.subredditHandle : undefined,
           },
           orderBy: {

@@ -1,13 +1,13 @@
-import { AvatarImage } from "@radix-ui/react-avatar";
-import { Avatar, AvatarFallback } from "./ui/avatar";
-import type { Comment } from '@/src/types'
-import DOMPurify from "dompurify";
-import { api } from "~/utils/api";
-import { useState } from "react";
-import { useSession } from "next-auth/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { Comment } from '@/src/types';
 import { faChevronDown, faChevronUp, faMessage } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AvatarImage } from "@radix-ui/react-avatar";
+import DOMPurify from "dompurify";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
+import { api } from "~/utils/api";
 import RichTextEditorReply from "./RichTextEditorReply";
+import { Avatar, AvatarFallback } from "./ui/avatar";
 
 export default function CommentItem(comment: Comment){
     const { data: session, status } = useSession();

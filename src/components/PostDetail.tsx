@@ -1,12 +1,12 @@
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import type { Post } from '@/src/types';
+import { faMessage } from '@fortawesome/free-regular-svg-icons';
 import { faAward, faBookmark, faChevronDown, faChevronUp, faEllipsis, faShare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import React, {useState} from 'react';
-import { faMessage } from '@fortawesome/free-regular-svg-icons';
-import type { Post } from '@/src/types'
 import DOMPurify from 'dompurify';
-import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useState } from 'react';
 import { api } from '~/utils/api';
 
 
@@ -125,18 +125,18 @@ const PostDetail = (props : Post) => {
       </div>
 
       <div className="flex flex-col pl-4 pt-2">
-        <Link href={`/r/${props.subreddit.title}/posts/${props.id}`}>
+        <Link href={`/r/${props.subreddit.subredditHandle}/posts/${props.id}`}>
           <div className="flex place-items-center space-x-2">
             <Avatar style={{width: 25, height: 25}}>
                 <AvatarImage src={props.user.image ?? '/images/placeholder-avatar.png'}/>
                 <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <Link href={`/r/${props.subreddit.title}`}><div className="font-bold">r/{props.subreddit.title}</div></Link> 
+            <Link href={`/r/${props.subreddit.subredditHandle}`}><div className="font-bold">r/{props.subreddit.subredditHandle}</div></Link> 
             <div className="font-thin text-gray-600">
               Posted by <Link href={`/u/${props.user.name ?? 'user'}`}> {props.user.name} </Link> {new Date(props.createdAt).toString()}
             </div>
           </div>
-          <div className="text-2xl font-bold py-4">
+          <div className="text-2xl font-bold py-4 mr-2">
             {props.title}
           </div>
           {

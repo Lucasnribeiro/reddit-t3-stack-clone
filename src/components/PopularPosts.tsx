@@ -1,13 +1,13 @@
+import { useSession } from 'next-auth/react';
 import React, { useState } from 'react';
 import PopularPostsFilter from '~/components/PopularPostsFilter';
 import PostItem from '~/components/PostItem';
 import QuickNewPost from '~/components/QuickNewPost';
+import { PopularPostsProps } from '~/types';
 import { api } from '~/utils/api';
+import { sortPostsByBest, sortPostsByHot, sortPostsByNew, sortPostsByTop } from '~/utils/sortingPosts';
 import PostItemSkeleton from './PostItemSkeleton';
 import ScrollTriggerComponent from './ScrollTriggerComponent';
-import { sortPostsByBest, sortPostsByHot, sortPostsByTop, sortPostsByNew } from '~/utils/sortingPosts';
-import { PopularPostsProps } from '~/types';
-import { useSession } from 'next-auth/react';
 
 
 

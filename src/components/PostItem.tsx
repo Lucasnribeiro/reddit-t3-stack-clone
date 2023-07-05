@@ -1,24 +1,22 @@
-import { faAward, faBookmark, faChevronDown, faChevronUp, faEllipsis, faShare } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import React, {useState} from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import type { Post } from '@/src/types';
 import { faMessage } from '@fortawesome/free-regular-svg-icons';
-import type { Post } from '@/src/types'
+import { faAward, faBookmark, faChevronDown, faChevronUp, faShare } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DOMPurify from 'dompurify';
-import Link from 'next/link';
 import { useSession } from 'next-auth/react';
-import { api } from '~/utils/api';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { api } from '~/utils/api';
 
 
 const PostItem = (props : Post) => {
-  const { data: session, status } = useSession();
+  const { data: session} = useSession();
   const [ upvote, setUpvote ] = useState(props.upvotes.some((item) => item.userId === session?.user.id ));
   const [ downvote, setDownvote ] = useState(props.downvotes.some((item) => item.userId === session?.user.id ));
   const [ currentInteractions, setCurrentInteractions ] = useState(Object.keys(props.upvotes).length - Object.keys(props.downvotes).length)
   const router = useRouter();
-
-  const trpc = api.useContext()
 
   const { mutate: upvotePost }  = api.post.upvotePost.useMutation({
       onSettled: async () => {

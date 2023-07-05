@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { signIn, signOut, useSession } from "next-auth/react";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { faGithub, faReddit } from '@fortawesome/free-brands-svg-icons';
+import { faBell, faCaretDown, faCircleArrowUp, faMessage, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown, faCircleArrowUp, faMessage, faBell, faPlus, faBullhorn } from '@fortawesome/free-solid-svg-icons';
-import { faReddit } from '@fortawesome/free-brands-svg-icons'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { signIn, signOut, useSession } from "next-auth/react";
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import SearchBar from '../SearchBar';
 import SelectSubreddit from '../SelectSubreddit';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './dropdownMenu';
-import { useRouter } from 'next/router';
-import SearchBar from '../SearchBar';
 
 const Navbar = () => {
   const { data: session, status } = useSession();
@@ -74,15 +74,16 @@ const Navbar = () => {
       </div>
 
       <div className="flex space-x-1">
-        <div className="flex items-center rounded-full border border-solid px-4 py-2 space-x-2">
-          <div className="rounded-full px-2 border-2 border-solid border-white font-black">
-            <FontAwesomeIcon
-              icon={faBullhorn}
-              className="bg-white text-2xl"
-            />
-          </div>
-          <div>Advertise</div>
-        </div>
+          
+          <Link className="flex items-center rounded-full border border-solid px-4 py-2 space-x-2" href={'https://github.com/Lucasnribeiro/reddit-t3-stack-clone'}>
+            <div className="rounded-full px-2 border-2 border-solid border-white font-black">
+              <FontAwesomeIcon
+                icon={faGithub}
+                className="bg-white text-2xl"
+              />
+            </div>
+            <div>Project</div>
+          </Link>
 
         <div className="flex space-x-2 items-center rounded px-2 hover:bg-gray-200">
           <div className="text-xs">
@@ -128,7 +129,7 @@ const Navbar = () => {
                 }}
               >
                 <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarImage src="/images/placeholder-avatar.png" />
                     <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </button>

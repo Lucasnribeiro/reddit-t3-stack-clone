@@ -1,13 +1,15 @@
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PresignedPost } from "aws-sdk/clients/s3";
+import { useSession } from "next-auth/react";
 import { useRef, useState } from "react";
-import { Image, Subreddit } from "~/types";
+import { Subreddit } from "~/types";
 import { api } from "~/utils/api";
 
 
 export default function SubredditImage(subreddit: Subreddit){
     const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const {data: session } = useSession()
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [uploadStatus, setUploadStatus] = useState<string>('pending');
     const [uploading, setUploading] = useState<boolean>(false);
@@ -72,8 +74,9 @@ export default function SubredditImage(subreddit: Subreddit){
         fileInputRef.current && fileInputRef.current.click();
     };
 
-    return (
-        <>
+    if(subreddit.ownerId === session?.user.id || subreddit.admins?.some( admin => admin.id === session?.user.id) ){
+        return (
+            <>
             {uploadStatus === 'pending' && <img className="w-20 h-20 rounded-full transition-opacity opacity-100 group-hover:opacity-50" src={subreddit.image ? `https://react-clone-bucket.s3.us-east-1.amazonaws.com/subreddit/${subreddit.id}/${subreddit.image}` : '/images/placeholder-avatar.png'} alt=""/>}
             {uploadStatus === 'uploading' &&  
                 <div
@@ -97,5 +100,10 @@ export default function SubredditImage(subreddit: Subreddit){
             
             <FontAwesomeIcon className="top-8 left-8 absolute w-3.5 h-3.5 cursor-pointer opacity-0 group-hover:opacity-100" onClick={handleButtonClick} icon={faUpload}/>
         </>
+        )
+    }
+
+    return (
+        <img className="w-20 h-20 rounded-full" src={subreddit.image ? `https://react-clone-bucket.s3.us-east-1.amazonaws.com/subreddit/${subreddit.id}/${subreddit.image}` : '/images/placeholder-avatar.png'} alt=""/>
     )
 }

@@ -2,7 +2,7 @@ import { faPerson } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import React, {useState} from 'react'
+import { useState } from 'react';
 import CreateImagePost from '~/components/CreateImagePost';
 import RichTextEditor from "~/components/RichTextEditor";
 import SelectSubreddit from '~/components/SelectSubreddit';
