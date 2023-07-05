@@ -112,11 +112,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext<{ su
     const subreddit = context.params?.subreddit;
     const ssr = ssrHelper();
     
-    await ssr.subreddit.get.prefetch({title: subreddit})
+    // await ssr.subreddit.get.prefetch({title: subreddit})
 
     return {
         props: {
-            trpcState: ssr.dehydrate(),
+            // trpcState: ssr.dehydrate(),
             subreddit,
         }
     };
