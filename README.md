@@ -16,6 +16,7 @@ I think the similarity was archieved and also the functionality (of course with 
 - Post a image to a subreddit
 - Comment a Post
 - Reply to a comment or another reply
+- Upvote and downvote posts and comments
 - Join a subreddit
 - Edit subreddit title and picture
 - Search posts, users and subreddits
