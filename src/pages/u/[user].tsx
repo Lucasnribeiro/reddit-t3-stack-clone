@@ -1,12 +1,11 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next";
 import { useSession } from "next-auth/react";
-import CreatePostCreateCommunityCard from "~/components/CreatePostCreateCommunityCard";
+import Head from "next/head";
 import PopularPosts from "~/components/PopularPosts";
+import ProfileUserCard from "~/components/ProfileUserCard";
 import { ssrHelper } from "~/server/api/ssrHelper";
 import { api } from "~/utils/api";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import ProfileUserCard from "~/components/ProfileUserCard";
-import Head from "next/head";
 
 const User: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ user }) => {
     const { data: session, status } = useSession();
@@ -44,7 +43,7 @@ const User: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                 </div>
             </Tabs>
         </div>
-        <div className="flex flex-col pt-5 pb7 bg-gray-200 mx-auto min-h-screen max-w-6xl lg:max-w-7xl xl:max-w-8xl"></div>
+        <div className="flex flex-col pt-5 pb-7 bg-gray-200 mx-auto min-h-screen max-w-6xl lg:max-w-7xl xl:max-w-8xl"></div>
 
 
 

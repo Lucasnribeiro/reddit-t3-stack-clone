@@ -19,7 +19,7 @@ export default function Submit(){
     }
 
     return (
-        <div className="flex flex-col pt-7 pb7 bg-gray-200 mx-auto min-h-screen max-w-6xl lg:max-w-7xl xl:max-w-8xl">
+        <div className="flex flex-col pt-7 pb-7 bg-gray-200 mx-auto min-h-screen max-w-6xl lg:max-w-7xl xl:max-w-8xl">
             <div className="flex gap-8">
                 <div className="w-full flex flex-col space-y-4">
                     <div className="flex">
