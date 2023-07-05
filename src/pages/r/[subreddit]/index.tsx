@@ -6,7 +6,6 @@ import CreatePostCreateCommunityCard from "~/components/CreatePostCreateCommunit
 import PopularPosts from "~/components/PopularPosts"
 import SubredditImage from '~/components/SubredditImage'
 import SubredditTitle from '~/components/SubredditTitle'
-import { ssrHelper } from "~/server/api/ssrHelper"
 import { api } from "~/utils/api"
 
 const Subreddit: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>>= ({ subreddit }) => {
@@ -108,9 +107,9 @@ const Subreddit: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
     )
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext<{ subreddit: string }>) {
+export function getServerSideProps(context: GetServerSidePropsContext<{ subreddit: string }>) {
     const subreddit = context.params?.subreddit;
-    const ssr = ssrHelper();
+    // const ssr = ssrHelper();
     
     // await ssr.subreddit.get.prefetch({title: subreddit})
 
