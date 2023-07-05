@@ -1,27 +1,31 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
+import { comment } from "postcss";
 
 export const commentRouter = createTRPCRouter({
 
   all: publicProcedure
   .input(
     z.object({
-      postId: z.string().optional()
+      postId: z.string().optional(),
+      parentId: z.string().optional()
     })
   )
   .query(async ({ ctx, input }) => {
-    const { postId } = input
+    const { postId, parentId } = input
     const comments = await ctx.prisma.comment.findMany({
         select: {
             id: true,
             createdAt: true,
             content: true,
+            post: true,
             user: true,
             upvotes: true,
             downvotes: true,
         },
         where:{
-            postId: postId ? postId : undefined
+            postId: postId ? postId : undefined,
+            parentId: parentId ? parentId : undefined
         },
         orderBy: {
             createdAt: "desc",
@@ -34,33 +38,34 @@ export const commentRouter = createTRPCRouter({
   get: publicProcedure
   .input(
     z.object({
-      postId: z.string().optional()
+      postId: z.string().optional(),
+      commentId: z.string().optional(),
+      parentId: z.string().optional()
     })
   )
   .query(async ({ ctx, input }) => {
-    const { postId } = input
-    const post = await ctx.prisma.post.findFirst({
+    const { postId, commentId, parentId } = input
+    const comment = await ctx.prisma.comment.findFirst({
         select: {
             id: true,
             createdAt: true,
-            title: true,
             content: true,
             user: true,
-            comments: true,
+            post: true,
             upvotes: true,
             downvotes: true,
-            subreddit: true,
-            images: true
         },
         where:{
-          id: postId ? postId : undefined
+          id: commentId ? commentId : undefined,
+          postId: postId ? postId : undefined,
+          parentId: parentId ? parentId : undefined
         },
         orderBy: {
             createdAt: "desc",
         },
     });
 
-    return post
+    return comment
   }),
     
   create: protectedProcedure
@@ -85,6 +90,7 @@ export const commentRouter = createTRPCRouter({
     z.object({
       content: z.string(),
       parentId: z.string(),
+      postId: z.string()
     })
   )
   .mutation(async ({ ctx, input }) => {
@@ -92,7 +98,8 @@ export const commentRouter = createTRPCRouter({
         data: {
           content: input.content,
           userId: ctx.session.user.id,
-          parentId: input.parentId
+          parentId: input.parentId,
+          postId: input.postId
         },
       });
   }),

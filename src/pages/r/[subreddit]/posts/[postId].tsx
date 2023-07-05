@@ -1,13 +1,11 @@
 import { faCake, faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AvatarFallback } from "@radix-ui/react-avatar";
-import DOMPurify from "dompurify";
 import { GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next"
 import Link from "next/link";
 import CommentItem from "~/components/CommentItem";
 import PostDetail from "~/components/PostDetail";
 import PostItemSkeleton from "~/components/PostItemSkeleton";
-import RichTextEditor from "~/components/RichTextEditor";
 import RichTextEditorComment from "~/components/RichTextEditorComment";
 import { Avatar, AvatarImage } from "~/components/ui/avatar";
 import { api } from "~/utils/api";
@@ -15,10 +13,10 @@ import { api } from "~/utils/api";
 
 const Post: NextPage<InferGetServerSidePropsType <typeof getServerSideProps>> =({postId}) => {
 
-    const { data: post, isLoading, isFetching } = api.post.get.useQuery({postId: postId})
+    const { data: post, isLoading, isFetching } = api.post.get.useQuery({postId: postId, onlyRootComments: true})
 
     return ( 
-        <div className="flex flex-col pt-7 pb7 bg-gray-200 mx-auto min-h-screen max-w-6xl lg:max-w-7xl xl:max-w-8xl">
+        <div className="flex flex-col pt-7 pb-7 bg-gray-200 mx-auto min-h-screen max-w-6xl lg:max-w-7xl xl:max-w-8xl">
             <div className="flex gap-8">
                 <div className="flex w-full flex-col">
                     {
@@ -32,8 +30,8 @@ const Post: NextPage<InferGetServerSidePropsType <typeof getServerSideProps>> =(
                                     <RichTextEditorComment subreddit={post?.subreddit.id} postId={post?.id}/>
                                     <div>
                                         {
-                                            post?.comments.map( (comment) => 
-                                                <CommentItem {...comment}/>
+                                            post?.comments?.map((comment) =>
+                                                <CommentItem key={comment.id} {...comment}/>
                                             )
                                         }
                                     </div>
@@ -95,7 +93,7 @@ const Post: NextPage<InferGetServerSidePropsType <typeof getServerSideProps>> =(
 }
 
 
-export async function getServerSideProps(context: GetServerSidePropsContext<{postId: string}>){
+export function getServerSideProps(context: GetServerSidePropsContext<{postId: string}>){
     const postId = context.params?.postId;
 
     return { 

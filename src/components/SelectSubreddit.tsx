@@ -28,11 +28,11 @@ const SelectSubreddit: React.FC<SelectSubredditProps> = ({setSubreddit, optionVa
         <Select
             {...props}
             options={options}
-            onChange={(selectedOption) => { if(selectedOption) setSubreddit(optionValue === 'id' ? selectedOption.id : selectedOption.title)} }
+            onChange={(selectedOption) => { if(selectedOption) setSubreddit(optionValue === 'id' ? selectedOption.id : selectedOption.subredditHandle)} }
             isSearchable
             onMenuScrollToBottom={handleFetchNextPage}
-            getOptionLabel={(option) => 'r/' + option.title}
-            getOptionValue={(option) => optionValue == 'id' ? option.id : option.title}
+            getOptionLabel={(option) => 'r/' + option.subredditHandle}
+            getOptionValue={(option) => optionValue == 'id' ? option.id : option.subredditHandle}
             placeholder="Select a community"
         />
     )

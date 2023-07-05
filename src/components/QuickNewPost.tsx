@@ -3,15 +3,17 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { faImage, faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 const QuickNewPost = () => {
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   return (
     <div className="flex items-center justify-between border border-solid border-gray-400 bg-white p-4 rounded shadow">
       <div className="flex items-center">
         <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarImage src={session?.user.image ?? '/images/placeholder-avatar.png'} />
             <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </div>

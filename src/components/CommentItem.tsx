@@ -7,23 +7,20 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp, faMessage } from "@fortawesome/free-solid-svg-icons";
-import ReplyToComment from "./ReplyToComment";
 import RichTextEditorReply from "./RichTextEditorReply";
-
-
-
-
-
 
 export default function CommentItem(comment: Comment){
     const { data: session, status } = useSession();
     const [ upvote, setUpvote ] = useState(comment?.upvotes.some((item) => item.userId === session?.user.id ));
     const [ downvote, setDownvote ] = useState(comment?.downvotes.some((item) => item.userId === session?.user.id ));
-    const [ currentInteractions, setCurrentInteractions ] = useState(Object.keys(comment?.upvotes).length - Object.keys(comment?.downvotes).length)
-  
+    const [ currentInteractions, setCurrentInteractions ] = useState(Object.keys(comment.upvotes).length - Object.keys(comment.downvotes).length)
+    const [ reply, setReply] = useState<boolean>(false)
+
+    const { data: replies, isLoading, isFetching } = api.comment.all.useQuery({parentId: comment?.id})
+
     const trpc = api.useContext()
   
-    const { mutate: upvoteCOmment }  = api.comment.upvoteComment.useMutation({
+    const { mutate: upvoteComment }  = api.comment.upvoteComment.useMutation({
         onSettled: async () => {
           // await trpc.post.getBatch.invalidate()
         }
@@ -50,15 +47,13 @@ export default function CommentItem(comment: Comment){
 
 
     return(
-        <div className="flex space-x-6 my-3">
+        <div className="flex space-x-1 my-2 w-full">
             <div className="flex flex-col w-12 items-center justify-center">
-
                     <Avatar>
                         <AvatarImage src={comment?.user.image ?? '/images/placeholder-avatar.png'}/>
                         <AvatarFallback />
                     </Avatar>
                     <div className="h-full border-l border-gray-400"/>
-
             </div>
             <div className="flex flex-col w-full">
                 <div className="w-full">
@@ -95,7 +90,7 @@ export default function CommentItem(comment: Comment){
 
                             <div>
                             <FontAwesomeIcon onClick={() => {
-                                    upvoteCOmment({commentId: comment.id});
+                                    upvoteComment({commentId: comment.id});
                                     if (downvote) {
                                     unDownvoteComment({ commentId: comment.id });
                                     setDownvote(false);
@@ -145,16 +140,28 @@ export default function CommentItem(comment: Comment){
                                 />
                             </div>
                         }
-                        <ReplyToComment parentId={comment.id} />
+                        <div className="flex flex-col w-full">
+                            <div className="flex w-full text-gray-500 space-x-4">
+                                <div onClick={() => setReply(true)} className="text-lg flex place-items-center space-x-2 p-2 hover:bg-gray-200">
+                                    <FontAwesomeIcon icon={faMessage} />
+                                    <div>
+                                        Reply
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
                 <div className="flex w-full">
                     <div className="h-full border-l border-gray-400"/>
-                    <RichTextEditorReply parentId={comment.id}/>
+                    {reply && <RichTextEditorReply reply={reply} setReply={setReply} parentId={comment.id} postId={comment.post!.id}/>}
                 </div>
-
+                {
+                    replies?.map( (reply) => <CommentItem key={reply.id} {...reply} />)
+                }
             </div>
+
         </div>
     )
 }

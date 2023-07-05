@@ -1,17 +1,26 @@
-import React, {useState} from 'react'
-import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, InferGetStaticPropsType, NextPage } from "next"
+import React, {useState, useEffect} from 'react'
+import { GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next"
 import { signIn, useSession } from "next-auth/react"
 import CreatePostCreateCommunityCard from "~/components/CreatePostCreateCommunityCard"
 import PopularPosts from "~/components/PopularPosts"
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { ssrHelper } from "~/server/api/ssrHelper"
 import { api } from "~/utils/api"
 import Head from 'next/head'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {  faPen, faPencil, faUpload } from '@fortawesome/free-solid-svg-icons'
+import SubredditTitle from '~/components/SubredditTitle'
+import SubredditImage from '~/components/SubredditImage'
 
 const Subreddit: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>>= ({ subreddit }) => {
     const { data: session, status } = useSession();
-    const { data: subredditQuery } = api.subreddit.get.useQuery({ title: subreddit})
-    const [memberStatus, setMemberStatus ] = useState(subredditQuery?.members.some((item) => item.userId === session?.user.id))
+    const { data: subredditQuery, isLoading } = api.subreddit.get.useQuery({ subredditHandle: subreddit})
+    const [memberStatus, setMemberStatus ] = useState<boolean>(false)
+
+    useEffect(() => {
+        if(subredditQuery){
+            setMemberStatus(subredditQuery.members.some((item) => item.userId === session?.user.id))
+        }
+    }, [subredditQuery])
 
     const trpc = api.useContext()
 
@@ -30,7 +39,7 @@ const Subreddit: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
     return (
         <>  
             <Head>
-                <title>/r/{subredditQuery?.title}</title>
+                <title>/r/{subredditQuery?.subredditHandle}</title>
             </Head>
 
             <div className="bg-white">
@@ -38,13 +47,12 @@ const Subreddit: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
 
                 </div>
                 <div className="flex pt-5 pb-7 bg-transparent mx-auto items-center max-w-6xl lg:max-w-7xl xl:max-w-8xl">
-                    <Avatar style={{width: 100, height: 100}}>
-                        <AvatarImage src={'/images/placeholder-avatar.png'}/>
-                        <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
+                    <div className="relative group">
+                        {subredditQuery && <SubredditImage {...subredditQuery} />}
+                    </div>
                     <div className="pl-8">
-                        <h1 className="font-bold text-3xl">{subredditQuery?.title}</h1>
-                        <p className="text-slate-500">r/{subredditQuery?.title}</p>
+                        {subredditQuery && <SubredditTitle {...subredditQuery}/> }
+                        <p className="text-slate-500">r/{subredditQuery?.subredditHandle}</p>
                     </div>
                     <div className="pl-10">
                         {subredditQuery ?
@@ -87,7 +95,7 @@ const Subreddit: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col pt-5 pb7 bg-gray-200 mx-auto min-h-screen max-w-6xl lg:max-w-7xl xl:max-w-8xl">
+            <div className="flex flex-col pt-5 pb-7 bg-gray-200 mx-auto min-h-screen max-w-6xl lg:max-w-7xl xl:max-w-8xl">
                 <div className="flex gap-8">
                     <div className="w-full">
                         <PopularPosts subredditId={subredditQuery?.id}/>

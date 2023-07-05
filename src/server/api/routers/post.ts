@@ -25,7 +25,12 @@ export const postRouter = createTRPCRouter({
             upvotes: true,
             downvotes: true,
             subreddit: true,
-            images: true
+            images: true,
+            _count:{
+              select:{
+                comments: true
+              }
+            },
         },
         where:{
           title: {
@@ -44,11 +49,12 @@ export const postRouter = createTRPCRouter({
   get: publicProcedure
   .input(
     z.object({
-      postId: z.string().optional()
+      postId: z.string().optional(),
+      onlyRootComments: z.boolean().optional(),
     })
   )
   .query(async ({ ctx, input }) => {
-    const { postId } = input
+    const { postId, onlyRootComments } = input
     const post = await ctx.prisma.post.findFirst({
         select: {
             id: true,
@@ -60,9 +66,18 @@ export const postRouter = createTRPCRouter({
               include:{
                 downvotes: true,
                 user: true,
+                parentComment: true,
                 post: true,
                 upvotes: true,
-                _count: true
+              }, 
+              where: {
+                parentId: onlyRootComments ? null : undefined,
+              }
+              
+            },
+            _count:{
+              select:{
+                comments: true
               }
             },
             upvotes: true,
@@ -188,6 +203,11 @@ export const postRouter = createTRPCRouter({
             post: true,
             upvotes: true,
             _count: true
+          }
+        },
+        _count:{
+          select:{
+            comments: true
           }
         },
         upvotes: true,

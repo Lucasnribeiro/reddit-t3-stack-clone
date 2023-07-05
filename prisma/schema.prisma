@@ -164,7 +164,8 @@ model Subreddit {
   id                    String      @id @default(cuid())
   createdAt             DateTime    @default(now())
   title                 String
-  subredditHandle       String?
+  image                 String?
+  subredditHandle       String
   admins                Admin[]
   moderators            Moderator[]
   members               UserSubreddit[]

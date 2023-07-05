@@ -1,5 +1,6 @@
 import * as React from "react"
 import * as AvatarPrimitive from "@radix-ui/react-avatar"
+import * as TooltipPrimitive from "@radix-ui/react-tooltip"
 
 import { cn } from "@/components/lib/utils"
 
@@ -17,6 +18,46 @@ const Avatar = React.forwardRef<
   />
 ))
 Avatar.displayName = AvatarPrimitive.Root.displayName
+
+const AvatarTooltipProvider = React.forwardRef<
+  React.ElementRef<typeof TooltipPrimitive.Provider>,
+  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider>
+>(({  ...props }, ref) => (
+  <TooltipPrimitive.Provider
+    {...props}
+  />
+))
+AvatarTooltipProvider.displayName = TooltipPrimitive.Provider.displayName
+
+const AvatarTooltip = React.forwardRef<
+  React.ElementRef<typeof TooltipPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Root>
+>(({  ...props }, ref) => (
+  <TooltipPrimitive.Root
+    {...props}
+  />
+))
+AvatarTooltip.displayName = TooltipPrimitive.Root.displayName
+
+const AvatarTooltipTrigger = React.forwardRef<
+  React.ElementRef<typeof TooltipPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Trigger>
+>(({  ...props }, ref) => (
+  <TooltipPrimitive.Trigger
+    {...props}
+  />
+))
+AvatarTooltipTrigger.displayName = TooltipPrimitive.Trigger.displayName
+
+const AvatarTooltipContent = React.forwardRef<
+  React.ElementRef<typeof TooltipPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
+>(({side, ...props }, ref) => (
+  <TooltipPrimitive.Content
+    {...props}
+  />
+))
+AvatarTooltipContent.displayName = TooltipPrimitive.Content.displayName
 
 const AvatarImage = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Image>,
@@ -45,4 +86,4 @@ const AvatarFallback = React.forwardRef<
 ))
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName
 
-export { Avatar, AvatarImage, AvatarFallback }
+export { Avatar, AvatarImage, AvatarFallback, AvatarTooltip, AvatarTooltipTrigger, AvatarTooltipContent, AvatarTooltipProvider }

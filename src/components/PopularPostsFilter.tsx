@@ -29,7 +29,7 @@ const PopularPostsFilter: React.FC<PopularPostsFilterProps> = ({ onFilterChange 
               <div
                 className={`${
                   activeFilter === item.name ? 'text-blue-500 bg-gray-200' : 'text-gray-500'
-                } rounded-full px-4 py-2 font-black flex place-items-center space-x-2 hover:bg-gray-300`}
+                } rounded-full px-4 py-2 font-black flex place-items-center space-x-2 hover:bg-gray-300 cursor-pointer`}
                 onClick={() => handleFilterChange(item.name)}
               >
                 {item.icon && <FontAwesomeIcon icon={item.icon} className="text-xl" />}

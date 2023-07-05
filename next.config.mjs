@@ -18,8 +18,5 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
-  experimental: {
-    esmExternals: false, // THIS IS THE FLAG THAT MATTERS
-  },
 };
 export default config;

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import QuillNoSSRWrapper from './lib/QuillNoSSRWrapper';
 import { api } from '~/utils/api';
-import {  useRouter } from 'next/router';
 
  const modules = {
     toolbar: [
@@ -19,14 +18,22 @@ import {  useRouter } from 'next/router';
     'link', 'image'
   ]
 
+interface RichTextEditorReplyProps {
+  parentId: string,
+  postId: string
+  reply: boolean,
+  setReply: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-const RichTextEditorReply = ({parentId}: {parentId: string}) => {
+const RichTextEditorReply = ({parentId, postId, reply, setReply}: RichTextEditorReplyProps ) => {
   const [content, setContent] = useState('');
-  const router = useRouter();
 
-  const { mutate } = api.comment.create.useMutation({
+  const trpc = api.useContext()
+
+  const { mutate } = api.comment.reply.useMutation({
     onSettled: async () => {
-      await router.push('/')
+      setReply(false)
+      await trpc.comment.all.invalidate()
     }
   })
 
@@ -36,27 +43,33 @@ const RichTextEditorReply = ({parentId}: {parentId: string}) => {
 
   const handleSave = () => {
     mutate({
-      postId: parentId,
+      postId: postId,
+      parentId: parentId,
       content: content
     })
     
   };
 
   return (
-    <div className=" bg-white p-4 rounded">
-        <div className="w-full flex flex-col space-y-4">
+    <div className=" bg-white p-4 rounded w-full">
+        <div className="flex flex-col space-y-4">
             <div className="rich-text-editor-wrapper">
-                <span className="text-sm">Post a comment</span>
-                <QuillNoSSRWrapper placeholder='What are your thoughts?' value={content} onChange={handleEditorChange} theme='snow' modules={modules} formats={formats}/>
+                <QuillNoSSRWrapper placeholder='Reply to a comment.' value={content} onChange={handleEditorChange} theme='snow' modules={modules} formats={formats}/>
             </div>
         </div>
-        <div className="flex justify-end mt-3">
+        <div className="flex justify-end mt-3 space-x-6">
+          <button
+            onClick={() => setReply(false)}
+            className="flex items-center justify-center px-4 font-bold text-blue-500 rounded-3xl focus:outline-none hover:bg-gray-200 disabled:bg-slate-300"
+            >
+                Cancel
+            </button>
             <button
             onClick={handleSave}
-            disabled={ content === ''}
+            disabled={ content.replace(/<(.|\n)*?>/g, '').trim().length === 0 }
             className="flex items-center justify-center px-4 font-bold text-white bg-blue-500 rounded-3xl focus:outline-none hover:bg-blue-600 disabled:bg-slate-300"
             >
-                Comment
+                Reply
             </button>
         </div>
     </div>

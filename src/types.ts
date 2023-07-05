@@ -4,11 +4,13 @@ import { RouterOutputs } from "./utils/api";
 
 type allPostsOutput = RouterOutputs["post"]["all"]
 type ImagesOutput = RouterOutputs["postImage"]["get"]
-type CommentOutput = RouterOutputs["comment"]["get"]
+type allCommentsOutput = RouterOutputs["comment"]["all"]
+type allSubredditsOutput = RouterOutputs["subreddit"]["all"]
 
 export type Post = allPostsOutput[number];
 export type Image = ImagesOutput;
-export type Comment = CommentOutput; 
+export type Comment = allCommentsOutput[number]; 
+export type Subreddit = allSubredditsOutput[number]
 
 export interface CreateCommunityFormValues {
     title: string;

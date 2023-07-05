@@ -8,6 +8,7 @@ import DOMPurify from 'dompurify';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { api } from '~/utils/api';
+import { useRouter } from 'next/router';
 
 
 const PostItem = (props : Post) => {
@@ -15,6 +16,7 @@ const PostItem = (props : Post) => {
   const [ upvote, setUpvote ] = useState(props.upvotes.some((item) => item.userId === session?.user.id ));
   const [ downvote, setDownvote ] = useState(props.downvotes.some((item) => item.userId === session?.user.id ));
   const [ currentInteractions, setCurrentInteractions ] = useState(Object.keys(props.upvotes).length - Object.keys(props.downvotes).length)
+  const router = useRouter();
 
   const trpc = api.useContext()
 
@@ -41,14 +43,6 @@ const PostItem = (props : Post) => {
       // await trpc.post.getBatch.invalidate()
     }
   })
-
-  const interactions = [
-    {id: '1', icon: faMessage, name: 'Comments' },
-    {id: '2', icon: faAward, name: 'Award' },
-    {id: '3', icon: faShare, name: 'Share' },
-    {id: '4', icon: faBookmark, name: 'Save' },
-    {id: '5', icon: faEllipsis, name: '' },
-  ];
 
   return (
 
@@ -125,13 +119,13 @@ const PostItem = (props : Post) => {
       </div>
 
       <div className="flex flex-col pl-4 pt-2">
-        <Link href={`/r/${props.subreddit.title}/posts/${props.id}`}>
+        <Link href={`/r/${props.subreddit.subredditHandle}/posts/${props.id}`}>
           <div className="flex place-items-center space-x-2">
             <Avatar style={{width: 25, height: 25}}>
                 <AvatarImage src={props.user.image ?? '/images/placeholder-avatar.png'}/>
                 <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <Link href={`/r/${props.subreddit.title}`}><div className="font-bold">r/{props.subreddit.title}</div></Link> 
+            <Link href={`/r/${props.subreddit.subredditHandle}`}><div className="font-bold">r/{props.subreddit.subredditHandle}</div></Link> 
             <div className="font-thin text-gray-600">
               Posted by <Link href={`/u/${props.user.name ?? 'user'}`}> {props.user.name} </Link> {new Date(props.createdAt).toString()}
             </div>
@@ -163,14 +157,35 @@ const PostItem = (props : Post) => {
         }
         </Link>
         <div className="flex text-gray-500 space-x-4">
-          {interactions.map((interaction) => (
-            <div key={interaction.id}  className="text-lg flex place-items-center space-x-2 p-2 hover:bg-gray-200">
-              <FontAwesomeIcon icon={interaction.icon} />
+
+            <div onClick={() => router.push(`/r/${props.subreddit.title}/posts/${props.id}#comment-section`)} className="text-lg flex place-items-center space-x-2 p-2 hover:bg-gray-200 cursor-pointer">
+              <FontAwesomeIcon icon={faMessage} />
               <div>
-                {interaction.name}
+                {props._count?.comments > 0 ? `${props._count?.comments} Comments` : 'Comments' }
               </div>
             </div>
-          ))}
+
+            <div  className="text-lg flex place-items-center space-x-2 p-2 hover:bg-gray-200 cursor-pointer">
+              <FontAwesomeIcon icon={faAward} />
+              <div>
+                Award
+              </div>
+            </div>
+
+            <div  className="text-lg flex place-items-center space-x-2 p-2 hover:bg-gray-200 cursor-pointer">
+              <FontAwesomeIcon icon={faShare} />
+              <div>
+                Share
+              </div>
+            </div>
+
+            <div  className="text-lg flex place-items-center space-x-2 p-2 hover:bg-gray-200 cursor-pointer">
+              <FontAwesomeIcon icon={faBookmark} />
+              <div>
+                Save
+              </div>
+            </div>
+
         </div>
       </div>
     </div>
