@@ -123,12 +123,20 @@ const PostItem = (props : Post) => {
                 <AvatarImage src={props.user.image ?? '/images/placeholder-avatar.png'}/>
                 <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <Link href={`/r/${props.subreddit.subredditHandle}`}><div className="font-bold">r/{props.subreddit.subredditHandle}</div></Link> 
-            <div className="font-thin text-gray-600">
-              Posted by <Link href={`/u/${props.user.name ?? 'user'}`}> {props.user.name} </Link> {new Date(props.createdAt).toString()}
+            <Link href={`/r/${props.subreddit.subredditHandle}`}><div className="font-bold text-xs sm:text-lg">r/{props.subreddit.subredditHandle}</div></Link> 
+            <div className="font-thin text-xs md:text-lg text-gray-600">
+              Posted by <Link href={`/u/${props.user.name ?? 'user'}`}> {props.user.name} </Link>     {
+              new Date(props.createdAt).toLocaleString('en-US', {
+                weekday: 'long',
+                month: 'short',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                timeZone: 'UTC'
+              })}
             </div>
           </div>
-          <div className="text-2xl font-bold py-4">
+          <div className="text-xl sm:text-2xl font-bold py-4">
             {props.title}
           </div>
           {
@@ -156,30 +164,30 @@ const PostItem = (props : Post) => {
         </Link>
         <div className="flex text-gray-500 space-x-4">
 
-            <div onClick={() => router.push(`/r/${props.subreddit.title}/posts/${props.id}#comment-section`)} className="text-lg flex place-items-center space-x-2 p-2 hover:bg-gray-200 cursor-pointer">
+            <div onClick={() => router.push(`/r/${props.subreddit.title}/posts/${props.id}#comment-section`)} className="text-xs md:text-lg flex place-items-center space-x-2 p-2 hover:bg-gray-200 cursor-pointer">
               <FontAwesomeIcon icon={faMessage} />
-              <div>
+              <div className="">
                 {props._count?.comments > 0 ? `${props._count?.comments} Comments` : 'Comments' }
               </div>
             </div>
 
-            <div  className="text-lg flex place-items-center space-x-2 p-2 hover:bg-gray-200 cursor-pointer">
+            <div className="text-xs md:text-lg flex place-items-center space-x-2 p-2 hover:bg-gray-200 cursor-pointer">
               <FontAwesomeIcon icon={faAward} />
-              <div>
+              <div className="hidden sm:block">
                 Award
               </div>
             </div>
 
-            <div  className="text-lg flex place-items-center space-x-2 p-2 hover:bg-gray-200 cursor-pointer">
+            <div className="text-xs md:text-lg flex place-items-center space-x-2 p-2 hover:bg-gray-200 cursor-pointer">
               <FontAwesomeIcon icon={faShare} />
-              <div>
+              <div className="hidden sm:block">
                 Share
               </div>
             </div>
 
-            <div  className="text-lg flex place-items-center space-x-2 p-2 hover:bg-gray-200 cursor-pointer">
+            <div className="text-sm md:text-lg flex place-items-center space-x-2 p-2 hover:bg-gray-200 cursor-pointer">
               <FontAwesomeIcon icon={faBookmark} />
-              <div>
+              <div className="hidden sm:block">
                 Save
               </div>
             </div>

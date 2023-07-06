@@ -34,12 +34,12 @@ const Navbar = () => {
           <FontAwesomeIcon
             icon={faReddit}
             style={{ color: '#FF5700' }}
-            className="bg-white text-4xl"
+            className="bg-white text-4xl mr-1 md:mr-0"
           />
           <div className="font-medium hidden lg:block">reddit</div>
         </div>
       </Link>
-      <div className="w-1/6 pt-1">
+      <div className="w-1/6 pt-1 hidden sm:block">
         <SelectSubreddit setSubreddit={setSubreddit} optionValue='title'/>
       </div>
 
@@ -61,7 +61,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="flex space-x-2 pl-2">
+        <div className="hidden sm:flex space-x-2 pl-2">
           {actions.map((action) => (
             <div
               key={action.iconName}
@@ -75,14 +75,14 @@ const Navbar = () => {
 
       <div className="flex space-x-1">
           
-          <Link className="flex items-center rounded-full border border-solid px-4 py-2 space-x-2" href={'https://github.com/Lucasnribeiro/reddit-t3-stack-clone'}>
+          <Link className="flex items-center rounded-full border border-solid ml-1 md:ml-0 md:px-4 md:py-2 space-x-2" href={'https://github.com/Lucasnribeiro/reddit-t3-stack-clone'}>
             <div className="rounded-full px-2 border-2 border-solid border-white font-black">
               <FontAwesomeIcon
                 icon={faGithub}
                 className="bg-white text-2xl"
               />
             </div>
-            <div>Project</div>
+            <div className="hidden sm:block">Project</div>
           </Link>
 
         <div className="flex space-x-2 items-center rounded px-2 hover:bg-gray-200">
@@ -97,7 +97,7 @@ const Navbar = () => {
                           <AvatarImage src={session.user.image ?? '/images/placeholder-avatar.png'}/>
                           <AvatarFallback>CN</AvatarFallback>
                       </Avatar>
-                      <div>@{session.user?.name}</div>
+                      <div className="hidden sm:block sm:text-md">@{session.user?.name}</div>
                       {/* 
                       <div className="flex items-center space-x-1">
                         <div>

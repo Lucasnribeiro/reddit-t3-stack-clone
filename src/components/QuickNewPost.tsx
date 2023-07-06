@@ -12,19 +12,19 @@ const QuickNewPost = () => {
   return (
     <div className="flex items-center justify-between border border-solid border-gray-400 bg-white p-4 rounded shadow">
       <div className="flex items-center">
-        <Avatar>
+        <Avatar className="w-7 h-7 md:h-10 md:w-10">
             <AvatarImage src={session?.user.image ?? '/images/placeholder-avatar.png'} />
             <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </div>
       <input
-        className="flex-1 ml-4 p-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring focus:border-blue-500"
+        className="w-full ml-4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
         placeholder="Write something..."
         onClick={() => router.push('/submit')}
       ></input>
       <div className="flex items-center ml-4 space-x-2">
-        <button className="p-2 rounded-md hover:bg-gray-200 focus:outline-none" onClick={() => router.push('/submit?type=image')}> <FontAwesomeIcon icon={faImage} /> </button>
-        <button className="p-2 rounded-md hover:bg-gray-200 focus:outline-none" onClick={() => router.push('/submit')}> <FontAwesomeIcon icon={faLink} /> </button>
+        <button className="p-2 rounded-md hover:bg-gray-200 focus:outline-none" onClick={() => router.push('/submit?type=image')}> <FontAwesomeIcon className='text-sm md:text-lg' icon={faImage} /> </button>
+        <button className="p-2 rounded-md hover:bg-gray-200 focus:outline-none" onClick={() => router.push('/submit')}> <FontAwesomeIcon className='text-sm md:text-lg' icon={faLink} /> </button>
       </div>
     </div>
   );
