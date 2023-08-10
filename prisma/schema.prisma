@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "postgres"
   url      = env("DATABASE_URL")
 }
 
@@ -41,23 +41,22 @@ model Session {
 }
 
 model User {
-  id                String        @id @default(cuid())
-  name              String?
-  email             String?       @unique
-  emailVerified     DateTime?
-  image             String?
-  accounts          Account[]
-  sessions          Session[]
-  posts             Post[]
-  comments          Comment[]
-  admiministrates   Admin[]
-  moderates         Moderator[]
-  subreddits        Subreddit[]
-  memberSubreddits  UserSubreddit[] 
-  upvotes           Upvote[] 
-  downvotes         Downvote[]
-  images            PostImage[]
-
+  id               String          @id @default(cuid())
+  name             String?
+  email            String?         @unique
+  emailVerified    DateTime?
+  image            String?
+  accounts         Account[]
+  sessions         Session[]
+  posts            Post[]
+  comments         Comment[]
+  admiministrates  Admin[]
+  moderates        Moderator[]
+  subreddits       Subreddit[]
+  memberSubreddits UserSubreddit[]
+  upvotes          Upvote[]
+  downvotes        Downvote[]
+  images           PostImage[]
 }
 
 model VerificationToken {
@@ -66,123 +65,114 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-
 }
 
 model Post {
-  id               String      @id @default(cuid())
-  createdAt        DateTime    @default(now())
-  userId           String
-  subredditId      String    
-  title            String
-  content          String      @db.Text()
-  user             User        @relation(fields: [userId], references: [id])
-  comments         Comment[]
-  upvotes          Upvote[]    @relation("PostUpvotes")
-  downvotes        Downvote[]  @relation("PostDownvotes")
-  subreddit        Subreddit   @relation(fields: [subredditId], references: [id], onDelete: Cascade)
-  images           PostImage[]
-
+  id          String      @id @default(cuid())
+  createdAt   DateTime    @default(now())
+  userId      String
+  subredditId String
+  title       String
+  content     String      @db.Text()
+  user        User        @relation(fields: [userId], references: [id])
+  comments    Comment[]
+  upvotes     Upvote[]    @relation("PostUpvotes")
+  downvotes   Downvote[]  @relation("PostDownvotes")
+  subreddit   Subreddit   @relation(fields: [subredditId], references: [id], onDelete: Cascade)
+  images      PostImage[]
 }
 
 model PostImage {
-  id               String      @id @default(cuid())
-  createdAt        DateTime    @default(now())
-  userId           String
-  postId           String?
-  user             User        @relation(fields: [userId], references: [id])
-  post             Post?        @relation(fields: [postId], references: [id])
-
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  userId    String
+  postId    String?
+  user      User     @relation(fields: [userId], references: [id])
+  post      Post?    @relation(fields: [postId], references: [id])
 }
 
 model Comment {
-  id               String     @id @default(cuid())
-  createdAt        DateTime   @default(now())
-  userId           String
-  content          String     @db.Text()
-  postId           String?
-  parentId         String?    
-  post             Post?      @relation(fields: [postId], references: [id])
-  parentComment    Comment?   @relation("ChildComments", fields: [parentId], references: [id]) 
-  user             User       @relation(fields: [userId], references: [id])
-  upvotes          Upvote[]   @relation("CommentUpvotes")
-  downvotes        Downvote[] @relation("CommentDownvotes")
-  childComments    Comment[]  @relation("ChildComments") 
+  id            String     @id @default(cuid())
+  createdAt     DateTime   @default(now())
+  userId        String
+  content       String     @db.Text()
+  postId        String?
+  parentId      String?
+  post          Post?      @relation(fields: [postId], references: [id])
+  parentComment Comment?   @relation("ChildComments", fields: [parentId], references: [id])
+  user          User       @relation(fields: [userId], references: [id])
+  upvotes       Upvote[]   @relation("CommentUpvotes")
+  downvotes     Downvote[] @relation("CommentDownvotes")
+  childComments Comment[]  @relation("ChildComments")
 }
 
 model Upvote {
-  id               String   @id @default(cuid())
-  createdAt        DateTime @default(now())
-  userId           String
-  postId           String?
-  commentId        String?
-  post             Post?    @relation(name: "PostUpvotes", fields: [postId], references: [id], onDelete: Cascade)
-  comment          Comment? @relation(name: "CommentUpvotes", fields: [commentId], references: [id], onDelete: Cascade)
-  user             User     @relation(fields: [userId], references: [id])
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  userId    String
+  postId    String?
+  commentId String?
+  post      Post?    @relation(name: "PostUpvotes", fields: [postId], references: [id], onDelete: Cascade)
+  comment   Comment? @relation(name: "CommentUpvotes", fields: [commentId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, postId])
   @@unique([userId, commentId])
-
 }
 
 model Downvote {
-  id               String   @id @default(cuid())
-  createdAt        DateTime @default(now())
-  userId           String
-  postId           String?
-  commentId        String?
-  post             Post?    @relation(name: "PostDownvotes", fields: [postId], references: [id], onDelete: Cascade)
-  comment          Comment? @relation(name: "CommentDownvotes", fields: [commentId], references: [id], onDelete: Cascade)
-  user             User     @relation(fields: [userId], references: [id])
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  userId    String
+  postId    String?
+  commentId String?
+  post      Post?    @relation(name: "PostDownvotes", fields: [postId], references: [id], onDelete: Cascade)
+  comment   Comment? @relation(name: "CommentDownvotes", fields: [commentId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, postId])
   @@unique([userId, commentId])
-
 }
 
 model Admin {
-  id            String    @id @default(cuid())
-  createdAt     DateTime  @default(now())
-  userId        String
-  subredditId   String
-  user          User      @relation(fields: [userId], references: [id])
-  subreddit     Subreddit @relation(fields: [subredditId], references: [id])
-
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  userId      String
+  subredditId String
+  user        User      @relation(fields: [userId], references: [id])
+  subreddit   Subreddit @relation(fields: [subredditId], references: [id])
 }
 
 model Moderator {
-  id            String    @id @default(cuid())
-  createdAt     DateTime  @default(now())
-  userId        String
-  subredditId   String
-  user          User      @relation(fields: [userId], references: [id])
-  subreddit     Subreddit @relation(fields: [subredditId], references: [id])
-
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  userId      String
+  subredditId String
+  user        User      @relation(fields: [userId], references: [id])
+  subreddit   Subreddit @relation(fields: [subredditId], references: [id])
 }
 
 model Subreddit {
-  id                    String      @id @default(cuid())
-  createdAt             DateTime    @default(now())
-  title                 String
-  image                 String?
-  subredditHandle       String
-  admins                Admin[]
-  moderators            Moderator[]
-  members               UserSubreddit[]
-  posts                 Post[]
-  ownerId               String
-  user                  User        @relation(fields: [ownerId], references: [id])
-
+  id              String          @id @default(cuid())
+  createdAt       DateTime        @default(now())
+  title           String
+  image           String?
+  subredditHandle String
+  admins          Admin[]
+  moderators      Moderator[]
+  members         UserSubreddit[]
+  posts           Post[]
+  ownerId         String
+  user            User            @relation(fields: [ownerId], references: [id])
 }
 
 model UserSubreddit {
-  id             String    @id @default(cuid())
-  createdAt      DateTime  @default(now())
-  userId         String
-  subredditId    String
-  user           User      @relation(fields: [userId], references: [id])
-  subreddit      Subreddit @relation(fields: [subredditId], references: [id])
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  userId      String
+  subredditId String
+  user        User      @relation(fields: [userId], references: [id])
+  subreddit   Subreddit @relation(fields: [subredditId], references: [id])
 
   @@unique([userId, subredditId])
-
 }

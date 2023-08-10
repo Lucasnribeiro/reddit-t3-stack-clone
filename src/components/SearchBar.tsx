@@ -1,11 +1,11 @@
-import React, { useState } from 'react' 
-import { faSearch } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import Select, { ActionMeta, StylesConfig } from 'react-select';
-import { api } from '~/utils/api';
-import { OptionType, Post } from '~/types';
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import Select, { ActionMeta, StylesConfig } from 'react-select';
 import { Url } from 'url';
+import { OptionType, Post } from '~/types';
+import { api } from '~/utils/api';
 
 const customStyles: StylesConfig<OptionType, true> = {
     control: (provided, state) => ({
@@ -69,7 +69,7 @@ const SearchBar = () => {
     ? subredditQuery.map((result) => ({
         value: result.id,
         label: result.title,
-        link:  result.title ? `/r/${result.title}` : '',
+        link:  result.subredditHandle ? `/r/${result.subredditHandle}` : '',
         }))
     : [];
 
